@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "klikber1",
+			"path": "../../klikber/klikber1"
+		},
+		{
+			"name": "application",
+			"path": "../../klikber/application"
+		}
+	],
+	"settings": {}
+}
