@@ -37,6 +37,11 @@ class Mlogin extends CI_Model {
         return $this->db->insert_id();
     }
 
+    function get_by_id($id){
+		$this->db->where('id', $id);
+		return $this->db->get('users');
+	}
+
     public function update_logout($id, $ip_address)
     {
         $data = [
@@ -111,4 +116,5 @@ class Mlogin extends CI_Model {
         }
         return false;
     }
+    
 }

@@ -30,57 +30,37 @@ if($this->session->flashdata('notif') != NULL){
       <div class="col-12">
         <div class="card">
           <div class="card-header">
-            <h4>Edit Dokter</h4>
+            <h4>Edit Pass</h4>
           </div>
           <div class="card-body">
             <?php 
             // Menampilkan data dokter yang sudah ada
-            foreach ($admin as $dok) {
-              $id = $dok->id;
-              $nama = $dok->nama;
-              $alamat = $dok->alamat;
-              $no_hp = $dok->no_hp;
+            foreach ($users as $key) {
+              $id = $key->id;
+              $username = $key->username;
+              $password = $key->password;
+              $id_role = $key->id_role;
             }
 
             // Form edit dokter
-            echo form_open_multipart('admin/update', array('class' => 'needs-validation', 'novalidate' => '')); 
+            echo form_open('landing/change_password', array('class' => 'needs-validation', 'novalidate' => '')); 
             ?>
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                  <label for="nama_admin">Nama Admin</label>
-                  <input type="hidden" name="id_admin_old" value="<?php echo $id;?>">
-                  <input type="text" class="form-control" name="nama" id="nama" value="<?php echo $nama;?>" required>
-                  <?php echo form_error('nama'); ?>
-                  <div class="invalid-feedback">
-                        Silahkan Masukan Nama Admin
-                  </div>
-              </div>
-              <div class="form-group">
-                <label for="no_hp">Nomor HP</label>
-                <input type="text" class="form-control" name="no_hp" id="no_hp" value="<?php echo $no_hp; ?>" maxlength="17" required>
-                <?php echo form_error('no_hp');?>
-                  <div class="invalid-feedback">
-                        Silahkan Masukan Nomor HP 
-                  </div>
-              </div>
-              
-
-            </div>
-
+             
             <div class="form-group">
-              <label for="alamat">Alamat Admin</label>
-              <textarea class="form-control" name="alamat"><?php echo $alamat; ?></textarea>
-              <?php echo form_error('alamat'); ?>
-              <div class="invalid-feedback">
-                        Silahkan Input Almaat Admin
-              </div>
+                <label>Password Lama</label>
+                <input type="password" name="password_lama" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>Password Baru</label>
+                <input type="password" name="password_baru" class="form-control" required>
             </div>
 
             <div class="card-footer text-center">
               <input type="hidden" name="id" value="<?php echo $id;?>">
+              <input type="hidden" name="username" value="<?php echo $username;?>">
               <button class="btn btn-primary mr-1" type="submit">Simpan</button>
               <button class="btn btn-secondary" type="button" onclick="history.back()">Reset</button>
-            
+
             </div>
             </form>
           </div>

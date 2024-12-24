@@ -65,20 +65,20 @@ if($this->session->flashdata('notif') != NULL){
               </div>
               <div class="form-group col-md-12">
                   <label for="harga">Harga</label>
-                  <input type="text" class="form-control" value="150000" name="harga" id="harga" disabled="disabled">
-                  <input type="hidden" name="harga" value="150000"> 
-                  <?php  echo form_error('harga'); ?>
+                  <input type="text" class="form-control" name="harga" id="harga" value="<?php echo set_value('harga', '150000'); ?>">
+                  <?php echo form_error('harga'); ?>
                   <div class="invalid-feedback">
-                        Silahkan Masukan Harga
+                      Silahkan Masukan Harga
                   </div>
               </div>
+
 
              
             </div>
             
             <div class="card-footer text-center">
               <button class="btn btn-primary mr-1" type="submit">Submit</button>
-              <button class="btn btn-secondary" type="reset">Reset</button>
+              <button class="btn btn-secondary" type="button" onclick="history.back()">Reset</button>
             </div>
             </form>
           </div>

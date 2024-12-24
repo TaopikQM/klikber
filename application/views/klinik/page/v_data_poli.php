@@ -20,7 +20,7 @@ if($this->session->flashdata('notif') != NULL){
   </div>
 </div>
 <?php }
-?>
+?> 
   <div class="section-body">
     <div class="row">
       <div class="col-12">

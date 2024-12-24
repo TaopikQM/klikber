@@ -45,9 +45,15 @@ class Role extends CI_Controller {
 
     public function store() {
         $data = [
-            'nama_role' => $this->input->post('nama_role')
+            'nama_role' => $this->input->post('nama_role'),
+			'keterangan' => $this->input->post('keterangan'),
         ];
         $this->MRole->insert($data);
+		
+		$this->session->set_flashdata('notif', [
+			'tipe' => 1, // alert-primary
+			'isi' => 'Data Role berhasil ditambah. '
+		]);
         redirect('role');
     }
     
@@ -64,17 +70,30 @@ class Role extends CI_Controller {
 		// Validasi input
 		$id = $this->input->post('id');
 		$this->form_validation->set_rules('nama_role', 'Nama role', 'required');
+		$this->form_validation->set_rules('keterangan', 'Keterangan', 'required');
 	
 		if ($this->form_validation->run() == FALSE) {
-			// Jika validasi gagal, tampilkan kembali form edit
-			$data['role'] = $this->MRole->get_by_id($id);
-			$this->load->view('klinik/page/v-edit-role', $data);
+			// // Jika validasi gagal, tampilkan kembali form edit
+			// $data['role'] = $this->MRole->get_by_id($id);
+			// $this->load->view('klinik/page/v-edit-role', $data);
+			
+			$this->session->set_flashdata('notif', [
+                'tipe' => 3, // alert-primary
+                'isi' => 'Data Role gagal diperbarui. '
+            ]);
+			redirect('role');
 		} else {
 			// Jika validasi berhasil, lanjutkan dengan update
 			$data = [
 				'nama_role' => $this->input->post('nama_role'),
+				'keterangan' => $this->input->post('keterangan'),
 			];
 			$this->MRole->update($id, $data);
+			
+			$this->session->set_flashdata('notif', [
+                'tipe' => 1, // alert-primary
+                'isi' => 'Data Role berhasil diperbarui. '
+            ]);
 			redirect('role');
 		}
 	}

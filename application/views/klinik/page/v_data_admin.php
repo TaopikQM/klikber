@@ -168,7 +168,7 @@ if($this->session->flashdata('notif') != NULL){
       </div>
     </div>
   </div>
-</div>
+</div> 
 <script src="<?php echo base_url()?>harta/morsip/assets/js/jquery-3.6.3.min.js"></script>
 <script type="text/javascript">
 $(document).on('click','#hapus',function(){

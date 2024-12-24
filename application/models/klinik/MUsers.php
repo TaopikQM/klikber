@@ -10,7 +10,11 @@ class MUsers extends CI_Model {
 	}
 
     public function get_all() {
-        return $this->db->get('Users')->result();
+        // return $this->db->get('Users')->result();
+        $query = $this->db->query("SELECT u.*, r.*
+        FROM users u
+        INNER JOIN role r ON u.id_role = r.id");
+        return $query->result();
     }
     public function getAllData()
     {

@@ -34,6 +34,7 @@ if($this->session->flashdata('notif') != NULL){
           </div>
           <div class="card-body">
             <?php 
+            $role = $this->session->userdata('role');
             // Menampilkan data dokter yang sudah ada
             foreach ($dokter as $dok) {
               $id = $dok->id;
@@ -44,7 +45,8 @@ if($this->session->flashdata('notif') != NULL){
             }
 
             // Form edit dokter
-            echo form_open_multipart('dokter/update', array('class' => 'needs-validation', 'novalidate' => '')); 
+            echo form_open_multipart($role == 'Admin' ? 'dokter/update_a' : 'dokter/update'//'dokter/update_a'
+            , array('class' => 'needs-validation', 'novalidate' => '')); 
             ?>
             <div class="form-row">
               <div class="form-group col-md-6">
@@ -92,7 +94,7 @@ if($this->session->flashdata('notif') != NULL){
             <div class="card-footer text-center">
               <input type="hidden" name="id" value="<?php echo $id;?>">
               <button class="btn btn-primary mr-1" type="submit">Simpan</button>
-              <a href="<?= base_url('dokter'); ?>" class="btn btn-secondary">Kembali</a>
+              <button class="btn btn-secondary" type="button" onclick="history.back()">Reset</button>
 
             </div>
             </form>

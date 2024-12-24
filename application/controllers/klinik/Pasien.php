@@ -24,6 +24,8 @@ class Pasien extends CI_Controller {
 		date_default_timezone_set("Asia/Jakarta");
 		$this->load->model('Klinik/MPasien');
         $this->load->model('Klinik/MUsers');
+        $this->load->model('Klinik/MPoli');
+        $this->load->model('Klinik/MDokter');
         $this->load->library('session');
 		$this->load->library('form_validation');
 		$this->load->library('encryption');
@@ -65,14 +67,19 @@ class Pasien extends CI_Controller {
         $new_id_pasien = $last_id_pasien + 1;
     
         // Generate nomor RM berdasarkan ID pasien yang baru
+        $formatted_id = str_pad($new_id, 3, '0', STR_PAD_LEFT);
         $tahun = date('Y');
         $bulan = date('m');
-        $no_rm = $tahun . $bulan . '-' . str_pad($new_id_pasien, 3, '0', STR_PAD_LEFT);
+        $no_rm = $tahun . $bulan . '-' . $formatted_id;
+        $username = 'P' . $tahun . '-' . $formatted_id;
+        $password = 'P' . $tahun . '-' . $formatted_id;
     
         // Kirim data ke view
         $data = [
             'new_id_pasien' => $new_id_pasien, // ID pasien baru
             'no_rm' => $no_rm, // Nomor RM yang baru
+            'username' => $username, // Username yang baru
+			'password' => $password,
         ];
     
         // Load view dan tampilkan data
@@ -90,10 +97,14 @@ class Pasien extends CI_Controller {
     
         if ($this->form_validation->run() == FALSE) {
             $this->create();
+            $this->session->set_flashdata('notif', [
+                'tipe' => 3, // alert-primary
+                'isi' => 'Data Pasien gagal ditambah.'
+            ]);
         } else {
             // Generate nomor RM berdasarkan ID pasien
-            $tahun = date('Y');
-            $bulan = date('m');
+            // $tahun = date('Y');
+            // $bulan = date('m');
             
             // Data untuk tabel pasien
             $data_pasien = [
@@ -106,9 +117,9 @@ class Pasien extends CI_Controller {
             // Simpan data pasien ke database
             $this->MPasien->insert($data_pasien);
 
-            // Data untuk tabel user
-            $username = $this->input->post('no_rm'); // Gunakan no_rm sebagai username
-            $password = $this->input->post('no_rm');
+           // Data untuk tabel user
+           $username = $this->input->post('username'); // Gunakan no_rm sebagai username
+           $password = $this->input->post('username');
             
             $data_user = [
                 'username' => $username,
@@ -118,9 +129,13 @@ class Pasien extends CI_Controller {
     
             // Simpan data user ke tabel user
             $this->MUsers->insert($data_user);
+            $this->session->set_flashdata('notif', [
+                'tipe' => 1, // alert-primary
+                'isi' => 'Data Pasien berhasil ditambah, dengan nama : ' . $nama
+            ]);
     
             // Redirect setelah penyimpanan berhasil
-            redirect('pasien');
+            redirect('pasien/tab');
         }
     }
     
@@ -146,8 +161,13 @@ class Pasien extends CI_Controller {
 	
 		if ($this->form_validation->run() == FALSE) {
 			// Jika validasi gagal, tampilkan kembali form edit
-			$data['pasien'] = $this->MPasien->get_by_id($id);
-           $this->load->view('klinik/page/v-edit-pasien', $data);
+		// 	$data['pasien'] = $this->MPasien->get_by_id($id);
+        //    $this->load->view('klinik/page/v-edit-pasien', $data);
+        $this->session->set_flashdata('notif', [
+            'tipe' => 1, // alert-primary
+            'isi' => 'Data Pasien berhasil diperbarui. '
+        ]);
+        redirect('pasien/profile');
 		} else {
 			// Jika validasi berhasil, lanjutkan dengan update
 			$data = [
@@ -158,7 +178,60 @@ class Pasien extends CI_Controller {
                 'no_rm' => $this->input->post('no_rm')
 			];
 			$this->MPasien->update($id, $data);
-			redirect('pasien');
+            // Ambil data pasien yang baru setelah update
+            $updated_pasien = $this->MPasien->get_by_id($id);
+            // Simpan data pasien terbaru di session jika perlu
+            $this->session->set_userdata('user_data', $updated_pasien);
+
+            $this->session->set_flashdata('notif', [
+                'tipe' => 1, // alert-primary
+                'isi' => 'Data Pasien berhasil diperbarui. '
+            ]);
+			redirect('pasien/profile');
+            
+            // $this->load->view('pasien/profile');
+		}
+	}
+   
+	public function update_a() {
+		// Validasi input
+		$id = $this->input->post('id');
+		$this->form_validation->set_rules('nama', 'Nama Pasien', 'required');
+		$this->form_validation->set_rules('alamat', 'Alamat', 'required');
+		$this->form_validation->set_rules('no_ktp', 'No KTP', 'required');
+		$this->form_validation->set_rules('no_hp', 'No HP', 'required');
+		$this->form_validation->set_rules('no_rm', 'NO RM', 'required');
+	
+		if ($this->form_validation->run() == FALSE) {
+			// Jika validasi gagal, tampilkan kembali form edit
+		// 	$data['pasien'] = $this->MPasien->get_by_id($id);
+        //    $this->load->view('klinik/page/v-edit-pasien', $data);
+        $this->session->set_flashdata('notif', [
+            'tipe' => 3, // alert-primary
+            'isi' => 'Data Pasien gagal diperbarui. '
+        ]);
+        redirect('pasien/tab');
+		} else {
+			// Jika validasi berhasil, lanjutkan dengan update
+			$data = [
+				'nama' => $this->input->post('nama'),
+				'alamat' => $this->input->post('alamat'),
+				'no_ktp' => $this->input->post('no_ktp'),
+                'no_hp' => $this->input->post('no_hp'),
+                'no_rm' => $this->input->post('no_rm')
+			];
+			$this->MPasien->update($id, $data);
+            // Ambil data pasien yang baru setelah update
+            $updated_pasien = $this->MPasien->get_by_id($id);
+            // Simpan data pasien terbaru di session jika perlu
+            $this->session->set_userdata('user_data', $updated_pasien);
+
+            $this->session->set_flashdata('notif', [
+                'tipe' => 1, // alert-primary
+                'isi' => 'Data Pasien berhasil diperbarui. '
+            ]);
+            // $this->load->view('pasien/tab');
+			redirect('pasien/tab');
 		}
 	}
 
@@ -166,7 +239,7 @@ class Pasien extends CI_Controller {
 		
 		$id = $this->input->post('id');
         $this->MPasien->delete($id);
-        redirect('pasien');
+        redirect('pasien/tab');
     }
 
     public function profile() {
@@ -176,6 +249,7 @@ class Pasien extends CI_Controller {
             $data = [
                 'username' => $this->session->userdata('useryyy'),
                 'role' => $this->session->userdata('role'),
+                'idus' => $this->session->userdata('idus'),
                 'id_filtered' => $this->session->userdata('id_filtered'),
                 'user_data' => $user_data,
                 'name' => $user_data->nama,
@@ -243,6 +317,133 @@ class Pasien extends CI_Controller {
             // redirect('landing/menu');
         }
     }
+    // Halaman daftar poli
+    public function daftarPoli() {
+        $user_data = $this->session->userdata('user_data');
+ 
+         if ($user_data) {
+             $data = [
+                 'id' => $user_data->id // Nama user
+             ];
+             $data['poli'] = $this->MPoli->get_all();
+               $ghj=$this->load->view('klinik/page/in-daftarpoli', $data,true);
+             $this->konten($ghj);
+         } else {
+             // Jika user_data tidak ada, redirect ke halaman login
+             redirect('landing');
+         }
+       
+    }
+
+    // Ambil dokter berdasarkan poli
+    public function getDokter() {
+        $id_poli = $this->input->post('id_poli');
+        $dokter = $this->MDokter->getDokterByPoli($id_poli);
+        echo json_encode($dokter);
+    }
+
+    // Ambil jadwal berdasarkan dokter
+    public function getJadwal() {
+        $id_dokter = $this->input->post('id_dokter');
+        $jadwal = $this->MDokter->getJadwalByDokter($id_dokter);
+        echo json_encode($jadwal);
+    }
+
+    public function getDokterJadwal()
+    {
+        $id_poli = $this->input->post('id_poli');
+
+        if ($id_poli) {
+            $data = $this->MDokter->getDokterJadwalByPoli($id_poli);
+            echo json_encode($data);
+        } else {
+            echo json_encode([]);
+        }
+    }
+
+
+    public function riwayat() {
+      
+        $user_data = $this->session->userdata('user_data');
+ 
+         if ($user_data) {
+             $data = [
+                 'id' => $user_data->id // Nama user
+             ];
+ 
+             
+                //  $data['riwayat'] = $this->MPasien->getRiwayatByPasien($user_data->id);
+                $riwayat = $this->MPasien->getRiwayatByPasien($user_data->id);
+                foreach ($riwayat as &$r) {
+                    $r['status'] = $this->MPasien->isSudahDiperiksa($r['id']) ? 'Sudah Diperiksa' : 'Belum Diperiksa';
+                }
+                $data['riwayat'] = $riwayat;
+               $ghj=$this->load->view('klinik/page/v_data_riwayat', $data,true);
+               
+             $this->konten($ghj);
+         } else {
+             // Jika user_data tidak ada, redirect ke halaman login
+             redirect('landing');
+         }
+     
+         
+     }
+
+    public function mendaftar() {
+        // $id_jadwal = $this->input->post('id_jadwal');
+        $id_jadwal = $this->input->post('id_jadwal');
+        $id_pasien = $this->input->post('id_pasien');
+        $keluhan = $this->input->post('keluhan');
+
+        // Generate nomor antrian
+        $no_antrian = $this->MPasien->generateNomorAntrian($id_jadwal);
+
+        // Simpan ke database
+        $data = [
+            'id_jadwal' => $id_jadwal,
+            'id_pasien' => $id_pasien,
+            'keluhan' => $keluhan,
+            'no_antrian' => $no_antrian
+        ];
+        $this->MPasien->saveDaftarPoli($data);
+        $this->session->set_flashdata('notif', [
+            'tipe' => 1, // alert-primary
+            'isi' => 'Pendaftaran berhasil! Nomor antrian Anda: ' . $no_antrian
+        ]);
+        redirect('pasien/riwayat');
+    }
+
+    public function daftar_riwayat($id_pasien) {
+        $data['riwayat'] = $this->MPasien->getRiwayatByPasien($id_pasien);
+        $ghj=$this->load->view('klinik/page/v_data_riwayat', $data,TRUE);
+		$this->konten($ghj);
+    }
     
+    public function riwayat_pasien() {
+      
+        $user_data = $this->session->userdata('user_data');
+ 
+         if ($user_data) {
+             $data = [
+                 'id' => $user_data->id // Nama user
+             ];
+ 
+             
+                //  $data['riwayat'] = $this->MPasien->getRiwayatByPasien($user_data->id);
+                $riwayat = $this->MPasien->getRiwayatPeriksa($user_data->id);
+                foreach ($riwayat as &$r) {
+                    $r->status = $this->MPasien->isSudahDiperiksa($r->id_pasien) ? 'Sudah Diperiksa' : 'Belum Diperiksa';
+                }
+                $data['periksa'] = $riwayat;
+               $ghj=$this->load->view('klinik/page/v_data_riwayat_pasien', $data,true);
+               
+             $this->konten($ghj);
+         } else {
+             // Jika user_data tidak ada, redirect ke halaman login
+             redirect('landing');
+         }
+     
+         
+    }
 
 }  

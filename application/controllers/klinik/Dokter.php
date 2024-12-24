@@ -22,7 +22,10 @@ class Dokter extends CI_Controller {
             redirect('landing/menu');
         }
 		date_default_timezone_set("Asia/Jakarta");
+		$this->load->model('landing/mlogin');
 		$this->load->model('Klinik/MDokter');
+		$this->load->model('Klinik/MPasien');
+		$this->load->model('Klinik/MObat');
         $this->load->model('Klinik/MPoli');
         $this->load->model('Klinik/MUsers');
         $this->load->library('session');
@@ -44,7 +47,7 @@ class Dokter extends CI_Controller {
 		$this->load->view('Klinik/home',$data);
 	}
 
-    public function index() {
+    public function indexa() {
 		$this->load->helper('pinjam');		
         $data['dokters'] = $this->MDokter->get_all();
         $ghj=$this->load->view('klinik/page/v_data_dokter', $data,TRUE);
@@ -121,7 +124,7 @@ class Dokter extends CI_Controller {
             ]);
     
             // Redirect setelah penyimpanan berhasil
-            redirect('dokter');
+            redirect('dokter/tab');
         }
     }
     
@@ -174,7 +177,47 @@ class Dokter extends CI_Controller {
                 'tipe' => 1, // alert-primary
                 'isi' => 'Data dokter berhasil diperbarui.'
             ]);
-			redirect('dokter');
+			redirect('dokter/profile');
+		}
+	}
+    public function update_a() {
+		// Validasi input
+		$id = $this->input->post('id');
+		$this->form_validation->set_rules('nama', 'Nama Dokter', 'required');
+		$this->form_validation->set_rules('alamat', 'Alamat', 'required');
+		$this->form_validation->set_rules('no_hp', 'No HP', 'required');
+		$this->form_validation->set_rules('id_poli', 'ID Poli', 'required');
+	
+		if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('notif', [
+                'tipe' => 2, // alert-warning
+                'isi' => 'Validasi gagal. Pastikan semua data diisi dengan benar.'
+            ]);
+            
+			// // Jika validasi gagal, tampilkan kembali form edit
+			// $data['dokter'] = $this->MDokter->get_by_id($id);
+            // $data['polis'] = $this->MPoli->get_all();
+			// $this->load->view('klinik/page/v-edit-dokter', $data);
+            $ida=str_replace(array('-','_','~'),array('+','/','='),$id);
+            $d=base64_decode($this->encryption->decrypt($ida));
+            $has['dokter']=$this->MDokter->get_by_id($d)->result();
+            $has['polis'] = $this->MPoli->get_all();
+            
+            $ghj=$this->load->view('klinik/page/v-edit-dokter',$has);
+		} else {
+			// Jika validasi berhasil, lanjutkan dengan update
+			$data = [
+				'nama' => $this->input->post('nama'),
+				'alamat' => $this->input->post('alamat'),
+				'no_hp' => $this->input->post('no_hp'),
+                'id_poli' => $this->input->post('id_poli')
+			];
+			$this->MDokter->update($id, $data);
+            $this->session->set_flashdata('notif', [
+                'tipe' => 1, // alert-primary
+                'isi' => 'Data dokter berhasil diperbarui.'
+            ]);
+			redirect('dokter/tab');
 		}
 	}
 
@@ -182,7 +225,7 @@ class Dokter extends CI_Controller {
 		
 		$id = $this->input->post('id');
         $this->MDokter->delete($id);
-        redirect('dokter');
+        redirect('dokter/tab');
     }
 
 	public function profile() {
@@ -192,6 +235,7 @@ class Dokter extends CI_Controller {
             $data = [
                 'username' => $this->session->userdata('useryyy'),
                 'role' => $this->session->userdata('role'),
+                'idus' => $this->session->userdata('idus'),
                 'id_filtered' => $this->session->userdata('id_filtered'),
                 'user_data' => $user_data,
                 'name' => $user_data->nama,
@@ -205,4 +249,275 @@ class Dokter extends CI_Controller {
             redirect('landing');
         }
     }
+
+    public function daftar_periksaa() {
+        $data['jadwal'] = $this->MDokter->get_jadwal_periksa();
+        $ghj=$this->load->view('klinik/page/v_data_jadwal', $data,true);
+        $this->konten($ghj);
+    }
+
+
+
+    public function jadwal()
+    {
+        // Ambil data user dari session
+        $user_data = $this->session->userdata('user_data');
+
+        if ($user_data) {
+            $id = $user_data->id;
+        
+        
+            // Panggil model untuk mendapatkan jadwal periksa berdasarkan ID
+            $data['jadwal'] = $this->MDokter->get_jadwal_by_user_id($id);
+
+            // Kirim data ke view
+            $ghj=$this->load->view('klinik/page/v_data_jadwal', $data,true);
+            
+        $this->konten($ghj);
+        }
+        else {
+            // Jika user_data tidak ada, redirect ke halaman login
+            redirect('landing');
+        }
+    }
+
+    public function tambah_jadwal() {
+      
+       $user_data = $this->session->userdata('user_data');
+
+		if ($user_data) {
+            $data = [
+				'id' => $user_data->id // Nama user
+            ];
+
+          	$ghj=$this->load->view('klinik/page/in-jadwal', $data,true);
+			$this->konten($ghj);
+        } else {
+            // Jika user_data tidak ada, redirect ke halaman login
+            redirect('landing');
+        }
+    
+        
+    }
+
+    public function simpan_jadwal() {
+        $data = [
+            'id_dokter' => $this->input->post('id_dokter'),
+            'hari' => $this->input->post('hari'),
+            'jam_mulai' => $this->input->post('jam_mulai'),
+            'jam_selesai' => $this->input->post('jam_selesai')
+        ];
+
+        // Validasi jadwal bentrok
+        $result = $this->MDokter->cek_jadwal_bentrok($data);
+        if ($result['status']) {
+            $this->session->set_flashdata('notif', [
+                'tipe' => 2,
+                'isi' => $result['pesan']//'Jadwal bertabrakan dengan jadwal lainnya.'
+            ]);
+            redirect('dokter/tambah_jadwal');
+            return;
+        }
+        $this->MDokter->simpan_jadwal($data);
+        $this->session->set_flashdata('notif', [
+            'tipe' => 1, // alert-primary
+            'isi' => 'Jadwal berhasil ditambahkan.'
+        ]);
+        redirect('dokter/daftar_periksa');
+    }
+
+    
+    public function edit_jadwal($id) {
+        
+		$ida=str_replace(array('-','_','~'),array('+','/','='),$id);
+		$d=base64_decode($this->encryption->decrypt($ida));
+		$has['jadwal']=$this->MDokter->get_jadwal_by_id($d)->result();
+		
+		$ghj=$this->load->view('klinik/page/v-edit-jadwal',$has,TRUE);
+		$this->konten($ghj);
+    }
+    
+
+	public function update_jadwal() {
+		$id = $this->input->post('id');
+		// Validasi input
+        $this->form_validation->set_rules('id_dokter', 'Dokter');
+        $this->form_validation->set_rules('hari', 'Hari', 'required');
+        $this->form_validation->set_rules('jam_mulai', 'Jam Mulai', 'required');
+        $this->form_validation->set_rules('jam_selesai', 'Jam Selesai', 'required');
+	
+		if ($this->form_validation->run() == FALSE) {
+			$dxc=$this->encryption->encrypt( base64_encode($id) ); 
+            $ff=str_replace( array('+','/','='),array('-','_','~'),$dxc ); 
+                        
+            redirect('dokter/edit_jadwal/'.$ff);
+            $this->session->set_flashdata('notif', [
+                'tipe' => 3,
+                'isi' => 'Jadwal gagal diperbarui.'
+            ]);
+
+            return;
+		} else {
+			// Jika validasi berhasil, proses update
+            $data = [
+                'id_dokter' => $this->input->post('id_dokter'),
+                'hari' => $this->input->post('hari'),
+                'jam_mulai' => $this->input->post('jam_mulai'),
+                'jam_selesai' => $this->input->post('jam_selesai')
+            ];
+    
+            // Validasi jadwal bentrok
+            $result = $this->MDokter->cek_jadwal_bentrok_edit($data,$id);
+            if ($result['status']) {
+                $this->session->set_flashdata('notif', [
+                    'tipe' => 2,
+                    'isi' => $result['pesan']//'Jadwal bertabrakan dengan jadwal lainnya.'
+                ]);
+                $dxc=$this->encryption->encrypt( base64_encode($id) ); 
+				$ff=str_replace( array('+','/','='),array('-','_','~'),$dxc ); 
+							
+                redirect('dokter/edit_jadwal/'.$ff);
+                return;
+            }
+    
+            // Update data jadwal
+            $this->MDokter->update_jadwal($id, $data);
+    
+            // Redirect dengan notifikasi sukses
+            $this->session->set_flashdata('notif', [
+                'tipe' => 1,
+                'isi' => 'Jadwal berhasil diperbarui.'
+            ]);
+            redirect('dokter/daftar_periksa');
+		}
+	}
+
+    public function delete_jadwal() {
+        $id = $this->input->post('id');
+        $this->MDokter->delete_jadwal($id);
+        redirect('dokter/daftar_periksa');
+    }
+    public function update_status()
+{
+    // Ambil data dari form
+    $id = $this->input->post('id');
+    $status = $this->input->post('status');
+    $updated_at = date('Y-m-d H:i:s'); // Waktu update sekarang
+
+    // Cek apakah ada jadwal aktif selain yang sedang diperbarui
+    $other_active_jadwal = $this->MDokter->get_other_active_jadwal($id);
+
+    if ($status == 'active' && !empty($other_active_jadwal)) {
+        $this->session->set_flashdata('notif', array('tipe' => 2, 'isi' => 'Hanya satu jadwal yang bisa aktif.'));
+        redirect('dokter/daftar_periksa'); // Kembali ke halaman sebelumnya
+        return;
+    }
+
+    // Update status di database
+    $data = array(
+        'status' => $status,
+        'last_reset_day' => $updated_at
+    );
+
+    // // Jika status menjadi aktif, pastikan hanya satu yang aktif
+    // if ($status == 'active') {
+    //     $this->MDokter->set_inactive_after_week($id); // Nonaktifkan jadwal lainnya untuk dokter tersebut
+    // }
+
+    $update_success = $this->MDokter->update_status($id, $data);
+    
+    $this->session->set_flashdata('notif', [
+        'tipe' => 1, // alert-primary
+        'isi' => 'Status jadwal berhasil diperbarui.'
+    ]);
+
+    redirect('dokter/daftar_periksa');
+}
+
+public function daftar_pasien() {
+    $user_data = $this->session->userdata('user_data');
+
+    if ($user_data) {
+        $id_dokter = $user_data->id;
+
+        // Ambil data pasien yang belum diperiksa
+        $data['riwayat'] = $this->MDokter->getRiwayatByDokter($id_dokter);
+
+        // Muat view dengan data pasien
+        $konten = $this->load->view('klinik/page/v_daftar_pasien', $data, true);
+        $this->konten($konten);
+    } else {
+        // Redirect ke halaman login jika user belum login
+        redirect('landing');
+    }
+}
+
+ // Halaman pemeriksaan
+ public function iPeriksa($id) {
+        
+    $ida=str_replace(array('-','_','~'),array('+','/','='),$id);
+    $d=base64_decode($this->encryption->decrypt($ida));
+    
+    
+    // Ambil data daftar_poli
+    $has['daftar_poli'] = $this->MDokter->getDetailById($d);
+    $has['obat'] = $this->MObat->get_all(); // Ambil obat untuk di pilih
+    $ghj=$this->load->view('klinik/page/in-periksa',$has,TRUE);
+    $this->konten($ghj);
+}
+
+public function simpanPeriksa() {
+    $id_daftar = $this->input->post('id_daftar_poli');
+    $tgl_periksa = $this->input->post('tgl_periksa');
+    $catatan = $this->input->post('catatan');
+    $biaya = $this->input->post('biaya');
+    $obat = $this->input->post('obat'); // obat sebagai array
+
+    $data_periksa = [
+        'id_daftar_poli' => $id_daftar,
+        'tgl_periksa' => $tgl_periksa,
+        'catatan' => $catatan,
+        'biaya_periksa' => $biaya,
+    ];
+
+    $this->MDokter->savePeriksa($data_periksa, $obat);
+
+    $this->session->set_flashdata('notif', [
+        'tipe' => 1, // alert-primary
+        'isi' => 'Pemeriksaan berhasil disimpan!'
+    ]);
+    redirect('dokter/daftar_pasien');
+}
+
+public function riwayat_pasien() {
+  
+    $user_data = $this->session->userdata('user_data');
+
+     if ($user_data) {
+         $data = [
+             'id' => $user_data->id // Nama user
+         ];
+
+         
+            //  $data['riwayat'] = $this->MPasien->getRiwayatByPasien($user_data->id);
+            $riwayat = $this->MDokter->getRiwayatPeriksa($user_data->id);
+            foreach ($riwayat as &$r) {
+                $r->status = $this->MPasien->isSudahDiperiksa($r->id_pasien) ? 'Sudah Diperiksa' : 'Belum Diperiksa';
+            }
+            $data['periksa'] = $riwayat;
+           $ghj=$this->load->view('klinik/page/v_data_riwayat_pasien', $data,true);
+           
+         $this->konten($ghj);
+     } else {
+         // Jika user_data tidak ada, redirect ke halaman login
+         redirect('landing');
+     }
+ 
+     
+}
+
+
+
+
+
 }  

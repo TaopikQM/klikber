@@ -97,6 +97,10 @@ class Admin extends CI_Controller {
         
             if ($this->form_validation->run() == FALSE) {
                 $this->create();
+                $this->session->set_flashdata('notif', [
+                    'tipe' => 3, // alert-primary
+                    'isi' => 'Data Admin gagal ditambah.'
+                ]);
             } else {
                 $data_admin = [
                     'nama' => $this->input->post('nama'),
@@ -118,7 +122,7 @@ class Admin extends CI_Controller {
                 
                 // Ambil username dan password dari input
                 $username = $this->input->post('username');
-                $password = $this->input->post('password');
+                $password = $this->input->post('username');
 
                 $data_user = [
                     'username' => $username,
@@ -127,6 +131,11 @@ class Admin extends CI_Controller {
                 ];
                 // Simpan data user ke tabel user
                 $this->MUsers->insert($data_user);
+                $this->session->set_flashdata('notif', [
+                    'tipe' => 1, // alert-primary
+                    'isi' => 'Data Admin berhasil ditambah, dengan nama : ' . $nama
+                ]);
+                
                 // Redirect setelah penyimpanan berhasil
                 redirect('admin');
             }
@@ -154,6 +163,10 @@ class Admin extends CI_Controller {
                 // Jika validasi gagal, tampilkan kembali form edit
                 $data['admin'] = $this->MAdmin->get_by_id($id);
                 $this->load->view('klinik/page/v-edit-admin', $data);
+                $this->session->set_flashdata('notif', [
+                    'tipe' => 3, // alert-primary
+                    'isi' => 'Data Admin gagal diperbarui.'
+                ]);
             } else {
                 // Jika validasi berhasil, lanjutkan dengan update
                 $data = [
@@ -162,6 +175,10 @@ class Admin extends CI_Controller {
                     'no_hp' => $this->input->post('no_hp')
                 ];
                 $this->MAdmin->update($id, $data);
+                $this->session->set_flashdata('notif', [
+                    'tipe' => 1, // alert-primary
+                    'isi' => 'Data Admin berhasil diperbarui, dengan nama : ' . $nama
+                ]);
                 redirect('admin');
             }
         }
@@ -180,6 +197,7 @@ class Admin extends CI_Controller {
                 $data = [
                     'username' => $this->session->userdata('useryyy'),
                     'role' => $this->session->userdata('role'),
+                    'idus' => $this->session->userdata('idus'),
                     'id_filtered' => $this->session->userdata('id_filtered'),
                     'user_data' => $user_data,
                     'name' => $user_data->nama,

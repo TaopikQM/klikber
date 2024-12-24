@@ -1,6 +1,8 @@
 <link rel="stylesheet" href="<?php echo base_url()?>harta/morsip/assets/bundles/datatables/datatables.min.css">
 <link rel="stylesheet" href="<?php echo base_url()?>harta/morsip/assets/bundles/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="<?php echo base_url()?>harta/morsip/assets/bundles/prism/prism.css">
+<link rel="stylesheet" href="<?php echo base_url()?>harta/morsip/assets/bundles/select2/dist/css/select2.min.css">
+
 
 
 <section class="section">
@@ -26,10 +28,10 @@ if($this->session->flashdata('notif') != NULL){
       <div class="col-12">
         <div class="card">
           <div class="card-header">
-            <a href="<?php echo base_url()?>dokter/tambah_jadwal" >
+            <!-- <a href="<?php echo base_url()?>pasien/daftarPoli" >
             <button type="button" class="btn btn-info btn-icon icon-left">
                   <i class="fas fa-plus"></i> Tambah
-            </button></a>
+            </button></a> -->
             <h4>&nbsp|| Data Nomor  </h4>
             </br>
             <!-- <a href="<?php echo site_url('reports/mobil_ekspor_excel/exmobil') ?>" class="btn btn-success" target="_blank">
@@ -74,10 +76,12 @@ if($this->session->flashdata('notif') != NULL){
                 <thead>
                   <tr bgcolor="#cccccc" >
                     <th class="text-center">NO</th>
-                    <th class="text-center">USERNAME</th>
-                    <th class="text-center">PASSWORD</th>
-                    <th class="text-center">ROLE</th>
-                    <th class="text-center">STATUS</th>
+                    <th class="text-center">TANGGAL PERIKSA</th>
+                    <th class="text-center">RIWAYAT MEDIS</th>
+                    <th class="text-center">NAMA</th>
+                    <th class="text-center">KELUHAN</th>
+                    <th class="text-center">CATATAN</th>
+                    <th class="text-center">OBAT</th>
                     <th class="text-center">ACTION</th>
                     
                   </tr>
@@ -85,46 +89,30 @@ if($this->session->flashdata('notif') != NULL){
                 <tbody>
                   <?php
                     // echo "<pre>";
-                    // print_r($jadwal);
+                    // print_r($periksa);
                     // echo "</pre>";
                   ?>
-                  <?php if (isset($users) && !empty($users)): ?>
-                    <?php $nomori=1; foreach ($users as $key) { ?>
+                  
+                  <?php if (isset($periksa) && !empty($periksa)): ?>
+                    <?php $nomori=1; foreach ($periksa as $key) { ?>
                         <tr bgcolor="#cccccc">
                             <td  class="text-center"><?php echo $nomori;?></td>
                             
                             <td class="text-center" >
                               <?php 
-                                echo $key->username;
+                                echo $key->tgl_periksa;
                               ?>    
-                            </td>
-                            <td class="text-center" >
-                              <?php 
-                                echo $key->password;
-                              ?>    
-                            </td>
-                            <td class="text-center" >
-                            <?php echo $key->nama_role; ?>    
-                            </td>
-                            <!-- <td class="text-center" >
-                            <?php echo $key->id_role; ?>    
-                            </td> -->
-                            <td class="text-center">
-                              <button 
-                                type="button" 
-                                class="btn status-btn btn-sm" 
-                                data-id="<?php echo $key->id; ?>" 
-                                data-status="<?php echo $key->id_role; ?>" 
-                                style="background-color: <?php echo $key->id_role == '1' ? 'green' : 'red'; ?>; color: white;">
-                                <?php echo ucfirst($key->id_role); ?>
-                              </button>
-                            </td>
-
-                            
+                            </td> 
+                            <td class="text-center"><?php echo $key->no_rm;?></td>
+                            <td class="text-center"><?php echo $key->nama;?></td>
+                            <td class="text-center"><?php echo $key->keluhan;?></td>
+                            <td class="text-center"><?php echo $key->catatan;?></td>
+                            <td class="text-center"><?php echo $key->obat;?></td>
                             
                             <td class="text-center" >
+                            
 
-                              <!-- <a href="<?php $dxc=$this->encryption->encrypt(base64_encode($key->id)); $ff=str_replace(array('+','/','='),array('-','_','~'),$dxc); echo base_url();?>admin/edit_jadwal/<?php echo $ff; ?>">
+                              <!-- <a href="<?php $dxc=$this->encryption->encrypt(base64_encode($key->id)); $ff=str_replace(array('+','/','='),array('-','_','~'),$dxc); echo base_url();?>pasie/edit/<?php echo $ff; ?>">
                               <button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" title="Edit">
                                 <i class="fa fa-pen" aria-hidden="true"></i></button>
                               </button>
@@ -133,28 +121,22 @@ if($this->session->flashdata('notif') != NULL){
                               <!-- <button type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" title="Upload Ulang Dokumen">
                                 <i  class="fa fa-upload" aria-hidden="true"></i>
                               </button> -->
-                              <!-- <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" title="Hapus" id="hapus" data-id="<?php echo $key->id;?>" data-hari="<?php echo $key->hari;?>">
-                                <i  class="fa fa-trash" aria-hidden="true"></i>
-                              </button>
-                              <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" title="Status" id="status" data-id="<?php echo $key->id;?>" data-status="<?php echo $key->status;?>">
+                              <!-- <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" title="Hapus " id="hapus"  data-id="<?php echo $key->id;?>" data-nama_role="<?php echo $key->nama_role; ?>">
                                 <i  class="fa fa-trash" aria-hidden="true"></i>
                               </button> -->
-                              <button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" title="Ubah Status" id="status" data-id="<?php echo $key->id;?>" data-status="<?php echo $key->id_role;?>">
-                                <i class="fa fa-edit" aria-hidden="true"></i>
-                              </button>
-                              
-                              
+                              <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#detailModal<?= $key->id_periksa; ?>">Detail</button>
+
                             </td>
                         </tr>
                     <?php $nomori++;
                       }
                     ?>
-                  <?php else: ?>
+                    <?php else: ?>
                         <tr>
-                            <td colspan="4" class="text-center">Tidak ada data Jadwal.</td>
+                            <td colspan="4" class="text-center">Tidak ada riwayat pasien.</td>
                         </tr>
                     <?php endif; ?>
-                </tbody>
+                  </tbody>
               </table>
             </div>
           </div>
@@ -177,7 +159,7 @@ if($this->session->flashdata('notif') != NULL){
         <p id="mp-tex"></p>
       </div>
       <div class="modal-footer bg-whitesmoke br">
-         <?php echo form_open_multipart('dokter/delete_jadwal');?>
+         <?php echo form_open_multipart('users/delete');?>
             <input type="hidden" name="id" value="" id="id_del">
             <button type="submit" class="btn btn-danger">Hapus</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>  
@@ -187,99 +169,72 @@ if($this->session->flashdata('notif') != NULL){
     </div>
   </div>
 </div>
-<!-- Modal untuk Ubah Status -->
-<div class="modal fade" id="modal_status" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+<!-- Modal Detail -->
+<?php foreach ($periksa as $key) : ?>
+<div class="modal fade" id="detailModal<?= $key->id_periksa; ?>" tabindex="-1" role="dialog" aria-labelledby="modalDetailLabel<?= $key->id; ?>" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Yakin Ubah Status?</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <div class="modal-header d-flex flex-column align-items-center">
+        <!-- Nomor Antrian dalam Kotak -->
+        <div class="text-center mb-3" style="width: 100%;">
+          <button class="btn btn-primary btn-lg" style="font-size: 28px; font-weight: bold; padding: 10px 20px; border-radius: 8px;">
+            No. Antrian: <?php echo $key->tgl_periksa;?>
+          </button>
+        </div>
+        <h5 class="modal-title" id="modalDetailLabel<?= $key->id_periksa; ?>">Detail Riwayat Medis</h5>
+        
+        
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; top: 10px; right: 15px;">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <p id="mp-tex"></p>
+        <div class="row">
+          <div class="col-md-6">
+            <p><strong>No. RM:</strong> <?= $key->no_rm; ?></p>
+            <p><strong>Dokter:</strong> <?= $key->nama; ?></p>
+            <p><strong>Poli:</strong> <?= $key->keluhan; ?></p>
+          </div>
+          <div class="col-md-6">
+            <p><strong>Hari:</strong> <?= $key->catatan; ?></p>
+            <p><strong>Jam:</strong> <?= $key->tgl_periksa; ?></p>
+            <p><strong>Keluhan:</strong> <?= $key->keluhan; ?></p>
+        
+          </div>
+        </div>
+            
+        <p><strong>Status:</strong>
+          <span class="badge <?= $key->status === 'Sudah Diperiksa' ? 'badge-success' : 'badge-warning'; ?>">
+            <?= $key->status; ?>
+          </span>
+        </p>
       </div>
-      <div class="modal-footer bg-whitesmoke br">
-         <?php echo form_open_multipart('dokter/update_status');?>
-            <input type="hidden" name="id" value="" id="id_del">
-            <input type="hidden" name="status" value="" id="status_input">
-            <button type="submit" class="btn btn-danger">Ubah</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>  
-        </form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div>
+<?php endforeach; ?>
+
+
+
+
 <script src="<?php echo base_url()?>harta/morsip/assets/js/jquery-3.6.3.min.js"></script>
 <script type="text/javascript">
 $(document).on('click','#hapus',function(){
         $('#modal_hapus').modal('show');
         var id=$(this).data('id');
-        var nama=$(this).data('hari');
-        var text="Hapus Jadwal : "+nama;
+        var nama=$(this).data('username');
+        var text="Hapus Users : "+nama;
         $("#mp-tex").text(text);
         $("#id_del").val(id);
-});
-$(document).on('click', '#status', function(){
-    $('#modal_status').modal('show');
-    var id = $(this).data('id');
-    var status = $(this).data('status');
-    var text = "Ubah Status Jadwal : " + (status === 'active' ? 'Inactive' : 'Active');
-    
-    $("#mp-tex").text(text);
-    $("#id_del").val(id);
-    $("#status_input").val(status === 'active' ? 'inactive' : 'active');
-});
-
-$('#modal_status form').submit(function(e){
-    e.preventDefault();
-    
-    var id = $('#id_del').val();
-    var newStatus = $('#status_input').val();
-    var currentTime = new Date().toISOString();
-    
-    $.ajax({
-        url: '<?php echo base_url();?>dokter/update_status',
-        type: 'POST',
-        data: {
-            id: id,
-            status: newStatus,
-            updated_at: currentTime
-        },
-        success: function(response) {
-            // Tidak memerlukan respon sukses
-            $('#modal_status').modal('hide');
-            
-            // Update status di tabel langsung tanpa reload halaman
-            var newStatusText = newStatus === 'active' ? 'Active' : 'Inactive';
-            var statusButton = $('#status[data-id="' + id + '"]');
-            statusButton.attr('data-status', newStatus);
-            statusButton.html('<i class="fa fa-edit" aria-hidden="true"></i> ');
-            
-            // Anda bisa menambahkan kode untuk mengupdate kolom waktu di tabel jika diperlukan
-            var waktuCell = statusButton.closest('tr').find('.waktu-ubah-status');
-            waktuCell.text(currentTime); // Update waktu yang diubah di tabel
-            // Refresh halaman tanpa reload
-            location.reload();
-        },
-        error: function(xhr, status, error) {
-            // Tidak menggunakan alert lagi
-            var msg = 'Gagal mengupdate status';
-            $('#modal_status').modal('hide');
-            // Refresh halaman tanpa reload
-            location.reload();
-            // Jika menggunakan `session`, atur flashdata seperti ini:
-            // $this->session->set_flashdata('notif', array('tipe' => 3, 'isi' => msg));
-            // Kemudian pada halaman menampilkan notifikasi menggunakan `session->flashdata()`
-        }
-    });
 });
 $(document).ready(function(){
 
 });
-
 </script>
 
-<script src="<?php //echo base_url()?>harta/morsip/assets/bundles/owlcarousel2/dist/owl.carousel.min.js"></script>
+<!-- <script src="<?php //echo base_url()?>harta/morsip/assets/bundles/owlcarousel2/dist/owl.carousel.min.js"></script>
 <script src="<?php //echo base_url()?>harta/morsip/assets/js/page/owl-carousel.js"></script>
+ -->

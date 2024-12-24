@@ -45,6 +45,18 @@ class Users extends CI_Controller {
             $this->konten($ghj);	
         }
 
+        public function tab() {
+            // $this->load->helper('pinjam');		
+            $data['users'] = $this->MUsers->get_all();
+            $ghj=$this->load->view('klinik/page/v_data_users', $data,TRUE);
+            $this->konten($ghj);	
+        }
+        public function log() {
+            $data['users'] = $this->MUsers->getAllData();
+            $ghj=$this->load->view('klinik/page/v_data_log_users', $data,TRUE);
+            $this->konten($ghj);	
+        }
+
         public function delete() {
             
             $id = $this->input->post('id');

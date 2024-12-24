@@ -19,7 +19,8 @@
       <!-- Responsive-->
       <link rel="stylesheet" href="<?php echo base_url()?>harta/landing/css/responsive.css">
       <!-- fevicon -->
-      <link rel="icon" href="<?php echo base_url()?>harta/landing/images/jtg.png" type="image/gif" />
+      <link rel="icon" href="<?php echo base_url()?>harta/landing/images/klikber-i.png" type="image/gif" />
+     
      
    </head>
    <!-- body -->
@@ -155,7 +156,7 @@
                      </div>
 
                      
-                        <div class="col-md-12 ">
+                        <!-- <div class="col-md-12 ">
                            <label for="alamat">Username dan Pass</label>
                            <div class="input-group" style="display: flex; align-items: center;">
                               <input 
@@ -177,6 +178,12 @@
                               </button>
                            </div>
                         </div>
+                         -->
+
+                         <div class="col-md-12 ">
+                        <label for="alamat">Username dan Pass</label>
+                           <input class="form_contril" placeholder="Username" type="text" name="username" value="<?= $username; ?>" readonly>
+                        </div>
                         <div class="col-sm-12">
                            <button class="send_btn" type="submit">Register</button>
                         </div>
@@ -184,12 +191,15 @@
                         
                      </div>
                   </form>
-                  <form class="main_form" method="post" action="<?php echo base_url('landing'); ?>">
+                  <form class="main_form" name="login" action="<?php echo base_url('landing');?>" method="post" enctype="multipart/form-data">
                      <div class="row">
+                       
                         <div class="col-sm-12">
-                              <button class="send_btn" type="submit">Login</button>
+                           <button class="send_btn">Log In</button>
                         </div>
+                        
                      </div>
+                     
                   </form>
 
             

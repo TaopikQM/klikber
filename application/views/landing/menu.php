@@ -17,7 +17,8 @@ if($this->session->userdata('idus') == null) {
       <!-- Responsive CSS -->
       <link rel="stylesheet" href="<?php echo base_url()?>harta/landing/css/responsive.css">
       <!-- Favicon -->
-      <link rel="icon" href="<?php echo base_url()?>harta/landing/images/jtg.png" type="image/gif" />
+      <link rel="icon" href="<?php echo base_url()?>harta/landing/images/klikber-i.png" type="image/gif" />
+     
    </head>
    <body class="main-layout">
       

@@ -24,12 +24,14 @@
             <li class="dropdown">
                 <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="feather"></i><span>Data</span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="<?php echo base_url('dokter')?>">Dokter</a></li>
-                    <li><a href="<?php echo base_url('pasien')?>">Pasien</a></li>
+                    <li><a href="<?php echo base_url('dokter/tab')?>">Dokter</a></li>
+                    <li><a href="<?php echo base_url('pasien/tab')?>">Pasien</a></li>
+                    <li><a href="<?php echo base_url('admin/tab')?>">Admin</a></li>
                     <li><a href="<?php echo base_url('poli')?>">Poli</a></li>
                     <li><a href="<?php echo base_url('obat')?>">Obat</a></li>
                     <li><a href="<?php echo base_url('role')?>">Role</a></li>
-                    <li><a href="<?php echo base_url('users')?>">Users</a></li>
+                    <li><a href="<?php echo base_url('users/log')?>">log Users</a></li>
+                    <li><a href="<?php echo base_url('users/tab')?>">Users</a></li>
                 </ul>
             </li>
 
@@ -49,6 +51,10 @@
             <li class="dropdown">
                 <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="feather"></i><span>Data</span></a>
                 <ul class="dropdown-menu">
+                    <li><a href="<?php echo base_url('dokter/jadwal')?>">Jadwal</a></li>
+                    <li><a href="<?php echo base_url('dokter/daftar_pasien')?>">Daftar Pasien</a></li>
+                    <li><a href="<?php echo base_url('dokter/riwayat_pasien')?>">Riwayat Pasien</a></li>
+                   
                     <!-- <li><a href="<?php echo base_url('dokter')?>">Dokter</a></li>
                     <li><a href="<?php echo base_url('admin')?>">Admin</a></li>
                     <li><a href="<?php echo base_url('poli')?>">Poli</a></li>
@@ -69,6 +75,8 @@
             <li class="dropdown">
                 <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="feather"></i><span>Data</span></a>
                 <ul class="dropdown-menu">
+                    <li><a href="<?php echo base_url('pasien/riwayat')?>">Riwayat Medis</a></li>
+                    
                     <!-- <li><a href="<?php echo base_url('dokter')?>">Dokter</a></li> -->
                     <!-- <li><a href="<?php echo base_url('pasien')?>">Pasien</a></li> -->
                     <!-- <li><a href="<?php echo base_url('poli')?>">Poli</a></li>

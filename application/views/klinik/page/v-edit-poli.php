@@ -76,7 +76,7 @@ if($this->session->flashdata('notif') != NULL){
             <div class="card-footer text-center">
               <input type="hidden" name="id" value="<?php echo $id;?>">
               <button class="btn btn-primary mr-1" type="submit">Submit</button>
-              <a href="<?= base_url('poli'); ?>" class="btn btn-secondary">Kembali</a>
+              <button class="btn btn-secondary" type="button" onclick="history.back()">Reset</button>
 
             </div>
             </form>

@@ -51,6 +51,11 @@ class Poli extends CI_Controller {
             'keterangan' => $this->input->post('keterangan')
         ];
         $this->MPoli->insert($data);
+		
+		$this->session->set_flashdata('notif', [
+			'tipe' => 1, // alert-primary
+			'isi' => 'Data Poli berhasil ditambah. '
+		]);
         redirect('poli');
     }
 
@@ -72,8 +77,14 @@ class Poli extends CI_Controller {
 	
 		if ($this->form_validation->run() == FALSE) {
 			// Jika validasi gagal, tampilkan kembali form edit
-			$data['poli'] = $this->MPoli->get_by_id($id);
-			$this->load->view('klinik/page/v-edit-poli', $data);
+			// $data['poli'] = $this->MPoli->get_by_id($id);
+			// $this->load->view('klinik/page/v-edit-poli', $data);
+			
+			$this->session->set_flashdata('notif', [
+                'tipe' => 3, // alert-primary
+                'isi' => 'Data Poli gagal diperbarui. '
+            ]);
+			redirect('poli');
 		} else {
 			// Jika validasi berhasil, lanjutkan dengan update
 			$data = [
@@ -81,6 +92,10 @@ class Poli extends CI_Controller {
 				'keterangan' => $this->input->post('keterangan')
 			];
 			$this->MPoli->update($id, $data);
+			$this->session->set_flashdata('notif', [
+                'tipe' => 1, // alert-primary
+                'isi' => 'Data Poli berhasil diperbarui. '
+            ]);
 			redirect('poli');
 		}
 	}

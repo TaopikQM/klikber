@@ -74,9 +74,9 @@ if($this->session->flashdata('notif') != NULL){
                 <thead>
                   <tr bgcolor="#cccccc" >
                     <th class="text-center">NO</th>
-                    <th class="text-center">USERNAME</th>
-                    <th class="text-center">PASSWORD</th>
-                    <th class="text-center">ROLE</th>
+                    <th class="text-center">HARI</th>
+                    <th class="text-center">JAM MULAI</th>
+                    <th class="text-center">JAM SELESAI</th>
                     <th class="text-center">STATUS</th>
                     <th class="text-center">ACTION</th>
                     
@@ -88,35 +88,35 @@ if($this->session->flashdata('notif') != NULL){
                     // print_r($jadwal);
                     // echo "</pre>";
                   ?>
-                  <?php if (isset($users) && !empty($users)): ?>
-                    <?php $nomori=1; foreach ($users as $key) { ?>
+                  <?php if (isset($jadwal) && !empty($jadwal)): ?>
+                    <?php $nomori=1; foreach ($jadwal as $key) { ?>
                         <tr bgcolor="#cccccc">
                             <td  class="text-center"><?php echo $nomori;?></td>
                             
                             <td class="text-center" >
                               <?php 
-                                echo $key->username;
+                                echo $key->hari;
                               ?>    
                             </td>
                             <td class="text-center" >
                               <?php 
-                                echo $key->password;
+                                echo $key->jam_mulai;
                               ?>    
                             </td>
                             <td class="text-center" >
-                            <?php echo $key->nama_role; ?>    
+                            <?php echo $key->jam_selesai; ?>    
                             </td>
                             <!-- <td class="text-center" >
-                            <?php echo $key->id_role; ?>    
+                            <?php echo $key->status; ?>    
                             </td> -->
                             <td class="text-center">
                               <button 
                                 type="button" 
                                 class="btn status-btn btn-sm" 
                                 data-id="<?php echo $key->id; ?>" 
-                                data-status="<?php echo $key->id_role; ?>" 
-                                style="background-color: <?php echo $key->id_role == '1' ? 'green' : 'red'; ?>; color: white;">
-                                <?php echo ucfirst($key->id_role); ?>
+                                data-status="<?php echo $key->status; ?>" 
+                                style="background-color: <?php echo $key->status == 'active' ? 'green' : 'red'; ?>; color: white;">
+                                <?php echo ucfirst($key->status); ?>
                               </button>
                             </td>
 
@@ -124,11 +124,11 @@ if($this->session->flashdata('notif') != NULL){
                             
                             <td class="text-center" >
 
-                              <!-- <a href="<?php $dxc=$this->encryption->encrypt(base64_encode($key->id)); $ff=str_replace(array('+','/','='),array('-','_','~'),$dxc); echo base_url();?>admin/edit_jadwal/<?php echo $ff; ?>">
+                              <a href="<?php $dxc=$this->encryption->encrypt(base64_encode($key->id)); $ff=str_replace(array('+','/','='),array('-','_','~'),$dxc); echo base_url();?>dokter/edit_jadwal/<?php echo $ff; ?>">
                               <button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" title="Edit">
                                 <i class="fa fa-pen" aria-hidden="true"></i></button>
                               </button>
-                              </a> -->
+                              </a>
                               
                               <!-- <button type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" title="Upload Ulang Dokumen">
                                 <i  class="fa fa-upload" aria-hidden="true"></i>
@@ -139,7 +139,7 @@ if($this->session->flashdata('notif') != NULL){
                               <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" title="Status" id="status" data-id="<?php echo $key->id;?>" data-status="<?php echo $key->status;?>">
                                 <i  class="fa fa-trash" aria-hidden="true"></i>
                               </button> -->
-                              <button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" title="Ubah Status" id="status" data-id="<?php echo $key->id;?>" data-status="<?php echo $key->id_role;?>">
+                              <button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" title="Ubah Status" id="status" data-id="<?php echo $key->id;?>" data-status="<?php echo $key->status;?>">
                                 <i class="fa fa-edit" aria-hidden="true"></i>
                               </button>
                               
@@ -281,5 +281,6 @@ $(document).ready(function(){
 
 </script>
 
-<script src="<?php //echo base_url()?>harta/morsip/assets/bundles/owlcarousel2/dist/owl.carousel.min.js"></script>
+<!-- <script src="<?php //echo base_url()?>harta/morsip/assets/bundles/owlcarousel2/dist/owl.carousel.min.js"></script>
 <script src="<?php //echo base_url()?>harta/morsip/assets/js/page/owl-carousel.js"></script>
+ -->

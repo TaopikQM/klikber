@@ -45,13 +45,31 @@ class Obat extends CI_Controller {
 		$this->konten($ghj);
     }
 
-    public function store() {
+    public function storea() {
         $data = [
             'nama_obat' => $this->input->post('nama_obat'),
             'kemasan' => $this->input->post('kemasan'),
             'harga' => $this->input->post('harga')
         ];
         $this->MObat->insert($data);
+        redirect('obat');
+    }public function store() {
+		$harga = $this->input->post('harga');
+
+		if(empty($harga)){
+			$harga = 150000;
+		}
+
+        $data = [
+            'nama_obat' => $this->input->post('nama_obat'),
+            'kemasan' => $this->input->post('kemasan'),
+            'harga' => $harga,
+        ];
+        $this->MObat->insert($data);
+		$this->session->set_flashdata('notif', [
+			'tipe' => 1, // alert-primary
+			'isi' => 'Data Admin berhasil ditambah, dengan nama : ' . $nama
+		]);
         redirect('obat');
     }
 
@@ -74,8 +92,14 @@ class Obat extends CI_Controller {
 			// Jika validasi gagal, tampilkan kembali form edit
 
 			
-			$data['obat'] = $this->MObat->get_by_id($id);
-			$this->load->view('klinik/page/v-edit-obat', $data);
+			// $data['obat'] = $this->MObat->get_by_id($id);
+			// $this->load->view('klinik/page/v-edit-obat', $data);
+			
+			$this->session->set_flashdata('notif', [
+				'tipe' => 3, // alert-primary
+				'isi' => 'Data Obat gagal diperbarui.'
+			]);
+			redirect('obat');
 		} else {
 			// Jika validasi berhasil, lanjutkan dengan update
 			$data = [
@@ -84,6 +108,10 @@ class Obat extends CI_Controller {
 				'harga' => $this->input->post('harga')
 			];
 			$this->MObat->update($id, $data);
+			$this->session->set_flashdata('notif', [
+				'tipe' => 1, // alert-primary
+				'isi' => 'Data Obat berhasil diperbarui'
+			]);
 			redirect('obat');
 		}
 	}

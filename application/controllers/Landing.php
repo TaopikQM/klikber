@@ -20,12 +20,19 @@ class Landing extends CI_Controller {
         array(
                 'cipher' => 'aes-128',
                 'mode' => 'ctr',
-                'key' => 'HJJHJKhahsgdgIYUGKHBJKH^&*^^%^&%^*988qw7e9'
+                // 'key' => 'HJJHJKhahsgdgIYUGKHBJKH^&*^^%^&%^*988qw7e9'
+				'key' => 'HJKHASJKD^**&&*(NJSHAHIDAsdfsa'
         )
 		);
 		date_default_timezone_set("Asia/Jakarta");
 		# code...
 	}
+
+	function konten($value=''){
+		$data['konten']=$value;
+		$this->load->view('Klinik/home',$data);
+	}
+
 	public function index()
 	{	
 		//$uji="admin_0_superadmin";
@@ -232,8 +239,52 @@ class Landing extends CI_Controller {
             redirect('landing#form-section');
         }
     }
+	public function edit_pass($idus) {
+        
+		// $id = $this->session->userdata('idus');
+		$ida=str_replace(array('-','_','~'),array('+','/','='),$idus);
+		$d=base64_decode($this->encryption->decrypt($ida));
+		
+		$has['users']=$this->mlogin->get_by_id($d)->result();
+		
+		$ghj=$this->load->view('klinik/page/v-edit-pass',$has,TRUE);
+		$this->konten($ghj);
+    }
 
-	
+	public function change_password()
+	{
+		$username = $this->input->post('username');
+		$user_id = $this->input->post('id');
+		
+		$password_lama = $this->input->post('password_lama'); // Password lama dari form
+		$password_baru = $this->input->post('password_baru'); // Password baru dari form
+
+		// Periksa pengguna berdasarkan username
+		$user = $this->mlogin->check_user($username);
+
+		if ($user && password_verify($password_lama, $user->password)) {
+				// Jika password lama cocok, hash password baru
+				$hashed_password = password_hash($password_baru, PASSWORD_DEFAULT);
+		
+			// Jika password lama cocok, ubah password
+			$is_updated = $this->mlogin->update_password($user_id, $hashed_password);
+
+			// Password berhasil diubah
+			$this->session->set_flashdata('notif', [
+				'tipe' => '1', // Notifikasi sukses
+				'isi' => 'Password berhasil diubah.'
+			]);
+				
+			redirect('dokter/profile');
+			
+		} else {
+			$this->session->set_flashdata('notif', [
+				'tipe' => '3',
+				'isi' => 'Password tidak sama.'
+			]);
+			redirect('dokter/profile');
+		}
+	}
 
 	public function authg()
 	{
@@ -284,10 +335,16 @@ class Landing extends CI_Controller {
 				// Format Dokter: D+tahun+(-)+id poli+(-)+3 angka id dokter
 				error_log(print_r($matches, true)); // Debugging
 				$id_filtered = $matches[1];
-			} elseif (preg_match('/^\d{6}-(\d{3})$/', $username, $matches)) {
-				// Format Pasien: username+tahun+bulan+(-)+3 angka id pasien
+			} 
+			// elseif (preg_match('/^\d{6}-(\d{3})$/', $username, $matches)) {
+			// 	// Format Pasien: username+tahun+bulan+(-)+3 angka id pasien
+			// 	$id_filtered = $matches[1];
+			// }
+			elseif (preg_match('/^P\d{4}-(\d{3})$/', $username, $matches)) {
+				// Format Pasien: username+tahun+(-)+3 angka id pasien
 				$id_filtered = $matches[1];
-			} elseif (preg_match('/^D\d{4}-(\d{3})$/', $username, $matches)) {
+			}
+			 elseif (preg_match('/^D\d{4}-(\d{3})$/', $username, $matches)) {
 				// Format Admin: A+tahun+3 angka id admin
 				$id_filtered = $matches[1];
 			}
@@ -399,7 +456,7 @@ class Landing extends CI_Controller {
 
 	}
 
-	public function change_password() {
+	public function change_passwornd() {
         $this->form_validation->set_rules('old_password', 'Password Lama', 'required');
         $this->form_validation->set_rules('new_password', 'Password Baru', 'required|min_length[8]');
         $this->form_validation->set_rules('confirm_password', 'Konfirmasi Password Baru', 'required|matches[new_password]');

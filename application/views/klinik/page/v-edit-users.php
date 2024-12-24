@@ -86,7 +86,7 @@
                         <div class="card-footer text-center">
                             <input type="hidden" name="id" value="<?php echo $id; ?>">
                             <button class="btn btn-primary mr-1" type="submit">Submit</button>
-                            <button class="btn btn-secondary" type="reset">Reset</button>
+                            <button class="btn btn-secondary" type="button" onclick="history.back()">Reset</button>
                         </div>
                         </form>
                     </div>

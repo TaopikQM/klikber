@@ -176,7 +176,7 @@ $(document).on('click','#hapus',function(){
     $("#id_del").val(id);
 });
 
-</script>
+</script> 
 
 <!-- <script src="<?php //echo base_url()?>harta/morsip/assets/bundles/owlcarousel2/dist/owl.carousel.min.js"></script>
 <script src="<?php //echo base_url()?>harta/morsip/assets/js/page/owl-carousel.js"></script>

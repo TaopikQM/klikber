@@ -87,7 +87,8 @@ if($this->session->flashdata('notif') != NULL){
             
             <div class="card-footer text-center">
               <button class="btn btn-primary mr-1" type="submit">Submit</button>
-              <button class="btn btn-secondary" type="reset">Reset</button>
+              <button class="btn btn-secondary" type="button" onclick="history.back()">Reset</button>
+
             </div>
             </form>
           </div>

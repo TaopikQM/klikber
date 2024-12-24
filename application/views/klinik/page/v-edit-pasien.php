@@ -39,6 +39,7 @@ if($this->session->flashdata('notif') != NULL){
           </div>
           <div class="card-body">
             <?php 
+            $role = $this->session->userdata('role');
             foreach ($pasien as $ky ) {
               $id=$ky->id;
               $nama=$ky->nama;
@@ -56,7 +57,8 @@ if($this->session->flashdata('notif') != NULL){
             $arrayName = array(
                   'class'=>"needs-validation",
                        'novalidate'=>'');
-            echo form_open_multipart('pasien/update',$arrayName);?>
+            echo form_open_multipart($role == 'Admin' ? 'pasien/update_a' : 'pasien/update'//'pasien/update_a'
+            ,$arrayName);?>
              <div class="form-row">
                   <label for="tgl">Nama Pasien</label>
                   <input type="hidden" name="napasienold" value="<?php echo $nama;?>">
@@ -105,7 +107,7 @@ if($this->session->flashdata('notif') != NULL){
             <div class="card-footer text-center">
               <input type="hidden" name="id" value="<?php echo $id;?>">
               <button class="btn btn-primary mr-1" type="submit">Submit</button>
-              <a href="<?= base_url('pasien'); ?>" class="btn btn-secondary">Kembali</a>
+              <button class="btn btn-secondary" type="button" onclick="history.back()">Reset</button>
 
             </div>
             </form>

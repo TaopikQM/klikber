@@ -113,7 +113,7 @@ if($this->session->flashdata('notif') != NULL){
                             
                             <td class="text-center" >
 
-                              <a href="<?php $dxc=$this->encryption->encrypt(base64_encode($key->id)); $ff=str_replace(array('+','/','='),array('-','_','~'),$dxc); echo base_url();?>dokter/edit/<?php echo $ff; ?>">
+                              <a href="<?php $dxc=$this->encryption->encrypt(base64_encode($key->id)); $ff=str_replace(array('+','/','='),array('-','_','~'),$dxc); echo base_url();?>dokter/edit_a/<?php echo $ff; ?>">
                               <button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" title="Edit">
                                 <i class="fa fa-pen" aria-hidden="true"></i></button>
                               </button>
@@ -183,7 +183,7 @@ $(document).on('click','#hapus',function(){
 $(document).ready(function(){
 
 });
-</script>
+</script> 
 
 <!-- <script src="<?php //echo base_url()?>harta/morsip/assets/bundles/owlcarousel2/dist/owl.carousel.min.js"></script>
 <script src="<?php //echo base_url()?>harta/morsip/assets/js/page/owl-carousel.js"></script>

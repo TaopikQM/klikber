@@ -58,7 +58,7 @@
                     <div class="small-box bg-success"  style="margin-bottom: 20px;">
                     <div class="inner">
                         <h3><?php echo $total_pasien; ?></h3>
-
+ 
                         <p>Total Pasien</p>
                     </div>
                     <div class="icon">
@@ -124,7 +124,7 @@
                     <div class="icon">
                         <i class="ion ion-person-add"></i> 
                     </div>
-                    <a href="admin" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="admin/tab" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->

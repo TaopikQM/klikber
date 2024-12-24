@@ -17,7 +17,11 @@
   <link rel="stylesheet" href="<?php echo base_url()?>harta/morsip/assets/bundles/prism/prism.css">
   <!-- Custom style CSS -->
   <link rel="stylesheet" href="<?php echo base_url()?>harta/morsip/assets/css/custom.css">
+  <link rel="icon" href="<?php echo base_url()?>harta/landing/images/klikber-i.png" type="image/gif" />
+     
   <!-- <link rel='shortcut icon' type='image/x-icon' href='<?php echo base_url()?>harta/jateng.ico' /> -->
+   
+
 </head>
 
 <body>
