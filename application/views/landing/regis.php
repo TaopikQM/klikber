@@ -13,7 +13,7 @@
       <meta name="description" content="">
       <meta name="author" content="">
       <!-- bootstrap css -->
-      <link rel="stylesheet" href="<?php echo base_url()?>harta/landing/css/bootstrap.min.css">
+      <link rel="stylesheet" href="<?php echo base_url()?>harta/landing/css/bootstrap.min.css"> 
       <!-- style css -->
       <link rel="stylesheet" href="<?php echo base_url()?>harta/landing/css/style.css">
       <!-- Responsive-->

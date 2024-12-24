@@ -84,5 +84,5 @@ class Role extends CI_Controller {
 		$id = $this->input->post('id');
         $this->MRole->delete($id);
         redirect('role');
-    }
+    } 
 }

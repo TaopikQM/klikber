@@ -149,7 +149,7 @@
 
   <!-- end JS Text Editor -->
   <script src="<?php echo base_url()?>harta/morsip/assets/bundles/summernote/summernote-bs4.js"></script>
-
+ 
   <!-- Template JS Modal -->
   <script src="<?php echo base_url()?>harta/morsip/assets/bundles/prism/prism.js"></script>
 

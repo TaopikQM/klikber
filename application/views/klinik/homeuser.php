@@ -147,7 +147,7 @@
 
   <!-- end JS Select 2 -->
   <script src="<?php echo base_url()?>harta/pinjam/assets/js/select2.full.min.js"></script>
-
+ 
   <!-- end JS Text Editor -->
   <script src="<?php echo base_url()?>harta/morsip/assets/bundles/summernote/summernote-bs4.js"></script>
 

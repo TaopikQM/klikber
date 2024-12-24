@@ -58,7 +58,7 @@ class Mlogin extends CI_Model {
 	 }
 
 	 public function get_user_datam($username)
-    {
+    { 
         $this->db->select('u.*, r.nama_role, d.nama as dokter_nama, d.alamat as dokter_alamat, 
                            p.nama_poli, p.keterangan as poli_keterangan');
         $this->db->from('users u');

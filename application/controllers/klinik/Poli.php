@@ -61,7 +61,7 @@ class Poli extends CI_Controller {
 		$has['poli']=$this->MPoli->get_by_id($d)->result();
 		$ghj=$this->load->view('klinik/page/v-edit-poli',$has,TRUE);
 		$this->konten($ghj);
-    }
+    } 
 
     
 	public function update() {

@@ -481,7 +481,7 @@ class Landing extends CI_Controller {
 			$this->form_validation->set_rules('almt', 'Alamat', 'required',array('required' => 'Silahkan Isi Alamat'));
 			$this->form_validation->set_rules('nohp', 'Nomor HP', 'required|numeric',
 				array(	'numeric' => 'Silahkan Masukan Angka Saja Tanpa Karakter')
-			);
+			); 
 			$this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[nmjabfung.email]',
 				array(	'required' => 'Silahkan Masukan Email Anda',
 						'valid_email' => 'Silahkan Masukan Email Dengan Benar',

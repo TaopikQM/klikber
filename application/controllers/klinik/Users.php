@@ -18,7 +18,7 @@ class Users extends CI_Controller {
             date_default_timezone_set("Asia/Jakarta");
             $this->load->model('Klinik/MUsers');
             
-            $this->load->model('Klinik/MPasien');
+            $this->load->model('Klinik/MPasien'); 
             $this->load->library('session');
             $this->load->library('form_validation');
             $this->load->library('encryption');

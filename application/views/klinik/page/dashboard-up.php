@@ -122,7 +122,7 @@
                         <p>Total Admin</p>
                     </div>
                     <div class="icon">
-                        <i class="ion ion-person-add"></i>
+                        <i class="ion ion-person-add"></i> 
                     </div>
                     <a href="admin" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>

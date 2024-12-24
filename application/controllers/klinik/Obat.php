@@ -94,4 +94,4 @@ class Obat extends CI_Controller {
         $this->MObat->delete($id);
         redirect('obat');
     }
-}
+} 

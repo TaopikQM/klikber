@@ -61,5 +61,5 @@ class MAdmin extends CI_Model {
     public function count_admin() {
         return $this->db->count_all_results('admin');
     }
-
+ 
 }

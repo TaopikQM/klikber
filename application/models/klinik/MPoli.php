@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class MPoli extends CI_Model {
 
-    public function __construct()
+    public function __construct() 
 	{
 		parent::__construct();
 		$this->db = $this->load->database('klinik', TRUE);

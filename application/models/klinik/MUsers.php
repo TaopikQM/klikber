@@ -156,7 +156,7 @@ class MUsers extends CI_Model {
     {
         // Ambil pengguna berdasarkan `idus`
         $user = $this->db->get_where('users', ['id' => $idus])->row();
-    
+     
         // Jika pengguna ditemukan dan password lama cocok
         if ($user && password_verify($old_password, $user->password)) {
             // Set new password

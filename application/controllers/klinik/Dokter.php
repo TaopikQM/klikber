@@ -205,4 +205,4 @@ class Dokter extends CI_Controller {
             redirect('landing');
         }
     }
-}
+}  

@@ -59,4 +59,4 @@ class MDokter extends CI_Model {
       }
 
     
-}
+} 
