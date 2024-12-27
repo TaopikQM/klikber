@@ -48,8 +48,7 @@ if($this->session->flashdata('notif') != NULL){
             echo form_open_multipart($role == 'Admin' ? 'dokter/update_a' : 'dokter/update'//'dokter/update_a'
             , array('class' => 'needs-validation', 'novalidate' => '')); 
             ?>
-            <div class="form-row">
-              <div class="form-group col-md-6">
+            <div class="form-group ">
                   <label for="nama_dokter">Nama Dokter</label>
                   <input type="hidden" name="id_dokter_old" value="<?php echo $id;?>">
                   <input type="text" class="form-control" name="nama" id="nama" value="<?php echo $nama;?>" required>
@@ -66,9 +65,11 @@ if($this->session->flashdata('notif') != NULL){
                         Silahkan Masukan Nomor HP 
                   </div>
               </div>
-              <div class="form-group">
+            <div class="form-row">
+              
+              <!-- <div class="form-group">
                 <label for="id_poli">Poli</label>
-                <select name="id_poli" class="form-control select2" id="id_poli" required>
+                <select name="id_poli" class="form-control select2" id="id_poli" readonly>
                     <option value="">Pilih Poli</option>
                     <?php foreach ($polis as $p): ?>
                         <option value="<?php echo $p->id; ?>" 
@@ -78,7 +79,7 @@ if($this->session->flashdata('notif') != NULL){
                     <?php endforeach; ?>
                 </select>
                 <?php echo form_error('id_poli', '<div class="text-danger">', '</div>'); ?>
-            </div>
+            </div> -->
 
             </div>
 

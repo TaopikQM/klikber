@@ -112,11 +112,11 @@ if($this->session->flashdata('notif') != NULL){
                             <td class="text-center" >
                             
 
-                              <!-- <a href="<?php $dxc=$this->encryption->encrypt(base64_encode($key->id)); $ff=str_replace(array('+','/','='),array('-','_','~'),$dxc); echo base_url();?>pasie/edit/<?php echo $ff; ?>">
+                              <a href="<?php $dxc=$this->encryption->encrypt(base64_encode($key->id_periksa)); $ff=str_replace(array('+','/','='),array('-','_','~'),$dxc); echo base_url();?>dokter/edit_riwayat/<?php echo $key->id_periksa; ?>">
                               <button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" title="Edit">
                                 <i class="fa fa-pen" aria-hidden="true"></i></button>
                               </button>
-                              </a> -->
+                              </a>
                               
                               <!-- <button type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" title="Upload Ulang Dokumen">
                                 <i  class="fa fa-upload" aria-hidden="true"></i>
@@ -178,12 +178,12 @@ if($this->session->flashdata('notif') != NULL){
         <!-- Nomor Antrian dalam Kotak -->
         <div class="text-center mb-3" style="width: 100%;">
           <button class="btn btn-primary btn-lg" style="font-size: 28px; font-weight: bold; padding: 10px 20px; border-radius: 8px;">
-            No. Antrian: <?php echo $key->tgl_periksa;?>
+            No. Antrian: <?php echo $key->tgl_periksa;?> 
           </button>
         </div>
         <h5 class="modal-title" id="modalDetailLabel<?= $key->id_periksa; ?>">Detail Riwayat Medis</h5>
         
-        
+         
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; top: 10px; right: 15px;">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -192,22 +192,27 @@ if($this->session->flashdata('notif') != NULL){
         <div class="row">
           <div class="col-md-6">
             <p><strong>No. RM:</strong> <?= $key->no_rm; ?></p>
-            <p><strong>Dokter:</strong> <?= $key->nama; ?></p>
-            <p><strong>Poli:</strong> <?= $key->keluhan; ?></p>
-          </div>
-          <div class="col-md-6">
-            <p><strong>Hari:</strong> <?= $key->catatan; ?></p>
+            <p><strong>Pasien:</strong> <?= $key->nama; ?></p>
             <p><strong>Jam:</strong> <?= $key->tgl_periksa; ?></p>
             <p><strong>Keluhan:</strong> <?= $key->keluhan; ?></p>
-        
+          </div>
+          <div class="col-md-6">
+            
+          <p><strong>Obat:</strong> <?= $key->obat; ?></p>
+          <p><strong>Catatan:</strong> <?= $key->catatan; ?></p>
           </div>
         </div>
+        <div class="text-center mb-3" style="width: 100%;">
+          <button class="btn btn-primary btn-lg" style="font-size: 28px; font-weight: bold; padding: 10px 20px; border-radius: 8px;">
+            Biaya: <?php echo $key->biaya_periksa;?> 
+          </button>
+        </div>
             
-        <p><strong>Status:</strong>
+        <!-- <p><strong>Status:</strong>
           <span class="badge <?= $key->status === 'Sudah Diperiksa' ? 'badge-success' : 'badge-warning'; ?>">
             <?= $key->status; ?>
           </span>
-        </p>
+        </p> -->
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

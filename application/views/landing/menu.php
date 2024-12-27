@@ -20,6 +20,29 @@ if($this->session->userdata('idus') == null) {
       <link rel="icon" href="<?php echo base_url()?>harta/landing/images/klikber-i.png" type="image/gif" />
      
    </head>
+   <style>
+.rounded-transparent {
+    position: relative;
+    display: inline-block;
+    border-radius: 50%; /* Membuat bentuk lingkaran */
+    padding: 10px; /* Memberikan ruang untuk efek transparan */
+    background: linear-gradient(
+        to bottom right,
+        rgba(255, 255, 255, 0.5),
+        rgba(0, 0, 0, 0.1)
+    ); /* Gradasi transparan */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Bayangan halus */
+}
+
+.rounded-transparent img {
+    border-radius: 50%; /* Membulatkan gambar */
+    display: block;
+    width: 100%; /* Gambar responsif */
+    height: auto;
+    object-fit: cover; /* Menjaga proporsi gambar */
+}
+
+   </style>
    <body class="main-layout">
       
          <header>
@@ -85,36 +108,97 @@ if($this->session->userdata('idus') == null) {
             <div class="container">
                <div class="row">
                   
-                  <div class="row">
+                  
                      <?php if ($role == 'Dokter'): ?>
-                        <div class="col-md-3">
-                              <div class="titlepage">
-                                 <a href="<?php echo base_url('dokter/profile'); ?>">
-                                    <img src="<?php echo base_url()?>harta/landing/images/klikber.png" alt="klikber"/>
-                                    <p>Klinik Bersama</p>
-                                 </a>
-                              </div>
+                        <div class="row">
+                           <div class="col-md-3">
+                                 <div class="titlepage">
+                                    <a href="<?php echo base_url('dokter/profile'); ?>">
+                                       <img  class="img-fluid" src="<?php echo base_url()?>harta/landing/images/klikber.png" alt="klikber-profile"/>
+                                       <p>Profile Dokter</p>
+                                    </a>
+                                 </div>
+                           </div>
+                           <div class="col-md-3">
+                                 <div class="titlepage">
+                                    <a href="<?php echo base_url('dokter/jadwal'); ?>">
+                                       <div class="rounded-transparent">
+                                          <img  class="img-fluid" src="<?php echo base_url()?>harta/landing/images/jp.png" alt="Kelola Jadwal Periksa"/>
+                                       </div>
+                                       <p>Kelola Jadwal Periksa</p>
+                                    </a>
+                                 </div>
+                           </div>
+                           <div class="col-md-3">
+                                 <div class="titlepage">
+                                    <a href="<?php echo base_url('dokter/daftar_pasien'); ?>">
+                                       <div class="rounded-transparent">
+                                          <img  class="img-fluid" src="<?php echo base_url()?>harta/landing/images/mdp.png" alt="Melihat Daftar Pasien"/>
+                                       </div>
+                                       <p>Melihat Daftar Pasien</p>
+                                    </a>
+                                 </div>
+                           </div>
+                           <div class="col-md-3">
+                                 <div class="titlepage">
+                                    <a href="<?php echo base_url('dokter/riwayat_pasien'); ?>">
+                                    <div class="rounded-transparent">
+                                       <img class="img-fluid" src="<?php echo base_url()?>harta/landing/images/mrp.png" alt="Melihat Riwayat Pasien"/>
+                                    </div>
+                                       <p>Melihat Riwayat Pasien</p>
+                                    </a>
+                                 </div>
+                           </div>
                         </div>
+
+                       
                      <?php elseif ($role == 'Pasien'): ?>
-                        <div class="col-md-3">
-                              <div class="titlepage">
-                                 <a href="<?php echo base_url('pasien/profile'); ?>">
-                                    <img src="<?php echo base_url()?>harta/landing/images/klikber.png" alt="klikber"/>
-                                    <p>Klinik Bersama</p>
-                                 </a>
-                              </div>
+                        <div class="row">
+                           <div class="col-md-3">
+                                 <div class="titlepage">
+                                    <a href="<?php echo base_url('pasien/profile'); ?>">
+                                       <img  class="img-fluid" src="<?php echo base_url()?>harta/landing/images/klikber.png" alt="klikber-profile"/>
+                                       
+                                       <p>Klinik Bersama</p>
+                                    </a>
+                                 </div>
+                           </div>
+                           <div class="col-md-3">
+                                 <div class="titlepage">
+                                    <a href="<?php echo base_url('pasien/riwayat'); ?>">
+                                    <div class="rounded-transparent">
+                                       <img class="img-fluid" src="<?php echo base_url()?>harta/landing/images/mrp.png" alt="Daftar Poli"/>
+                                    </div>
+                                       <p>Daftar Poli</p>
+                                    </a>
+                                 </div>
+                           </div>
+                           <div class="col-md-3">
+                                 <div class="titlepage">
+                                    <a href="<?php echo base_url('pasien/riwayat_pasien'); ?>">
+                                    <div class="rounded-transparent">
+                                       <img class="img-fluid" src="<?php echo base_url()?>harta/landing/images/mrp.png" alt="Daftar Poli"/>
+                                    </div>
+                                       <p>Riwayat Periksa</p>
+                                    </a>
+                                 </div>
+                           </div>
+                           
                         </div>
                      <?php elseif ($role == 'Admin'): ?>
-                        <div class="col-md-3">
-                              <div class="titlepage">
-                                 <a href="<?php echo base_url('admin'); ?>">
-                                    <img src="<?php echo base_url()?>harta/landing/images/klikber.png" alt="klikber"/>
+                        <div class="row">
+                           <div class="col-md-3">
+                                 <div class="titlepage">
+                                    <a href="<?php echo base_url('admin'); ?>">
+                                       <img  class="img-fluid" src="<?php echo base_url()?>harta/landing/images/klikber.png" alt="klikber-profile"/>
+                                       
                                     <p>Klinik Bersama</p>
-                                 </a>
-                              </div>
+                                    </a>
+                                 </div>
+                           </div>
                         </div>
                      <?php endif; ?>
-                  </div>
+                  
                  
                </div>
             </div>

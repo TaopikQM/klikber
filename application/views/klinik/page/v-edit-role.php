@@ -42,6 +42,7 @@ if($this->session->flashdata('notif') != NULL){
             foreach ($role as $ky ) {
               $id=$ky->id;
               $nama_role=$ky->nama_role;
+              $keterangan=$ky->keterangan;
             }
             /*echo "<pre>";
             print_r($data);
@@ -53,8 +54,7 @@ if($this->session->flashdata('notif') != NULL){
                   'class'=>"needs-validation",
                        'novalidate'=>'');
             echo form_open_multipart('role/update',$arrayName);?>
-             <div class="form-row">
-              <div class="form-group col-md-6">
+              <div class="form-group ">
                   <label for="tgl">Nama Role</label>
                   <input type="hidden" name="naroleold" value="<?php echo $nama_role;?>">
                   <input type="text" class="form-control" name="nama_role" id="nama_role" value="<?php echo $nama_role;?>" required="required">
@@ -63,7 +63,14 @@ if($this->session->flashdata('notif') != NULL){
                         Silahkan Masukan Nama role
                   </div>
               </div>
-            </div>
+              <div class="form-group">
+                <label>Keterangan Role</label>
+              <textarea class="form-control "  name="keterangan" ><?php echo $keterangan;?></textarea>
+                <?php  echo form_error('keterangan'); ?>
+                <div class="invalid-feedback">
+                          Silahkan Input keterangan lainnya
+                </div>
+              </div>
             
             <div class="card-footer text-center">
               <input type="hidden" name="id" value="<?php echo $id;?>">

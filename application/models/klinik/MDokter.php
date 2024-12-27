@@ -15,6 +15,15 @@ class MDokter extends CI_Model {
         $this->db->join('poli', 'poli.id = dokter.id_poli', 'inner');
         return $this->db->get()->result();
     }
+
+    public function get_dokter_with_username() {
+        $this->db->select('dokter.id, dokter.nama, dokter.alamat, dokter.no_hp, dokter.id_poli, poli.nama_poli, users.username');
+        $this->db->from('dokter');
+        $this->db->join('poli', 'poli.id = dokter.id_poli', 'inner');
+        $this->db->join('users', "CAST(SUBSTRING(users.username, -3) AS UNSIGNED) = dokter.id AND users.username LIKE 'D%'", 'left');
+        return $this->db->get()->result();
+    }
+    
     public function insert($data) {
         return $this->db->insert('dokter', $data);
     }
@@ -114,27 +123,30 @@ class MDokter extends CI_Model {
         $query_hari = $this->db->get('jadwal_periksa');
     
         // Jika ada data dengan hari yang sama, jadwal bentrok langsung
-        if ($query_hari->num_rows() > 0) {
-            return [
-                'status' => true,
-                'pesan' => 'Dokter sudah memiliki jadwal pada hari yang sama.'
-            ];
-        }
+        // if ($query_hari->num_rows() > 0) {
+        //     return [
+        //         'status' => true,
+        //         'pesan' => 'Dokter sudah memiliki jadwal pada hari yang sama.'
+        //     ];
+        // }
     
         // Langkah 2: Jika tidak ada hari yang sama, cek bentrok berdasarkan rentang waktu
-        $this->db->where('id_dokter', $data['id_dokter']);
-        $this->db->group_start(); // Grup kondisi waktu
-            $this->db->where('jam_mulai <', $data['jam_selesai']);
-            $this->db->where('jam_selesai >', $data['jam_mulai']);
-        $this->db->group_end();
-        $query_waktu = $this->db->get('jadwal_periksa');
-    
-        // Jika ada data dengan rentang waktu bentrok, jadwal bentrok
-        if ($query_waktu->num_rows() > 0) {
-            return [
-                'status' => true,
-                'pesan' => 'Jadwal bentrok dengan rentang waktu yang ada.'
-            ];
+        if ($query_hari->num_rows() > 0) {
+            $this->db->where('id_dokter', $data['id_dokter']);
+            $this->db->where('hari', $data['hari']);
+            $this->db->group_start(); // Grup kondisi waktu
+                $this->db->where('jam_mulai <', $data['jam_selesai']);
+                $this->db->where('jam_selesai >', $data['jam_mulai']);
+            $this->db->group_end();
+            $query_waktu = $this->db->get('jadwal_periksa');
+        
+            // Jika ada data dengan rentang waktu bentrok, jadwal bentrok
+            if ($query_waktu->num_rows() > 0) {
+                return [
+                    'status' => true,
+                    'pesan' => 'Jadwal bentrok dengan rentang waktu yang ada.'
+                ];
+            }
         }
     
         
@@ -184,6 +196,18 @@ class MDokter extends CI_Model {
         $this->db->where('id', $id);
         $this->db->update('jadwal_periksa', $data);
     }
+    public function get_jadwal_by_idA($id)
+    {
+        return $this->db->get_where('jadwal_periksa', ['id' => $id])->row();
+    }
+    public function get_active_jadwal_by_dokter($id_dokter)
+    {
+        $this->db->where('id_dokter', $id_dokter);
+        $this->db->where('status', 'active');
+        return $this->db->get('jadwal_periksa')->row();
+    }
+
+
     public function get_active_jadwal($id_dokter)
     {
         $this->db->where('status', 'active');
@@ -362,6 +386,168 @@ class MDokter extends CI_Model {
         $query = $this->db->get();
         return $query->result(); // Mengembalikan hasil query
     }
+
+    public function getDetailPeriksaNById($id_periksa) {
+        $this->db->select('p.id AS id_periksa, p.*, dp.*, ps.*, GROUP_CONCAT(o.nama_obat SEPARATOR ", ") AS obat');
+        $this->db->from('periksa p');
+        $this->db->join('daftar_poli dp', 'p.id_daftar_poli = dp.id');
+        $this->db->join('pasien ps', 'dp.id_pasien = ps.id');
+        $this->db->join('detail_periksa dpr', 'p.id = dpr.id_periksa');
+        $this->db->join('obat o', 'dpr.id_obat = o.id');
+        $this->db->join('jadwal_periksa jp', 'dp.id_jadwal = jp.id');
+        $this->db->where('p.id', $id_periksa); // Filter berdasarkan ID periksa
+        $this->db->group_by('p.id'); // Grupkan hasil berdasarkan ID periksa
+    
+        $query = $this->db->get();
+        return $query->row(); // Mengembalikan satu baris data
+    }
+    public function getDetailPerikMsaById($id_periksa) {
+        $this->db->select('
+            p.id AS id_periksa, 
+            p.*, 
+            dp.*, 
+            ps.*, 
+            o.id AS id_obat,
+            o.nama_obat,
+            o.kemasan,
+            o.harga,
+        '); // Ambil semua kolom dari obat yang diperlukan
+        $this->db->from('periksa p');
+        $this->db->join('daftar_poli dp', 'p.id_daftar_poli = dp.id');
+        $this->db->join('pasien ps', 'dp.id_pasien = ps.id');
+        $this->db->join('detail_periksa dpr', 'p.id = dpr.id_periksa');
+        $this->db->join('obat o', 'dpr.id_obat = o.id');
+        $this->db->join('jadwal_periksa jp', 'dp.id_jadwal = jp.id');
+        $this->db->where('p.id', $id_periksa); // Filter berdasarkan ID periksa
+        $this->db->group_by('p.id'); // Grupkan hasil berdasarkan ID periksa
+        
+        $query = $this->db->get();
+        return $query->result(); // Mengembalikan satu baris data
+    }
+    public function getDetailPeriksaNNById($id_periksa) {
+        $this->db->select('
+            p.id AS id_periksa, 
+            p.*, 
+            dp.*, 
+            ps.*, 
+            o.id AS id_obat,
+            o.nama_obat,
+            o.harga,
+            o.kemasan
+        '); // Ambil semua kolom obat yang diperlukan
+        $this->db->from('periksa p');
+        $this->db->join('daftar_poli dp', 'p.id_daftar_poli = dp.id');
+        $this->db->join('pasien ps', 'dp.id_pasien = ps.id');
+        $this->db->join('detail_periksa dpr', 'p.id = dpr.id_periksa');
+        $this->db->join('obat o', 'dpr.id_obat = o.id');
+        $this->db->join('jadwal_periksa jp', 'dp.id_jadwal = jp.id');
+        $this->db->where('p.id', $id_periksa); // Filter berdasarkan ID periksa
+        $this->db->order_by('o.id'); // Urutkan berdasarkan id_obat untuk memudahkan pengelompokkan
+        
+        $query = $this->db->get();
+        return $query->result(); // Mengembalikan hasil query
+    }
+    
+    public function getDetailPeriksaById($id_periksa) {
+        $this->db->select('
+            p.id AS id_periksa, 
+            p.*, 
+            dp.*, 
+            ps.*, 
+            o.id AS id_obat,
+            o.nama_obat,
+            o.harga
+        ');
+        $this->db->from('periksa p');
+        $this->db->join('daftar_poli dp', 'p.id_daftar_poli = dp.id');
+        $this->db->join('pasien ps', 'dp.id_pasien = ps.id');
+        $this->db->join('detail_periksa dpr', 'p.id = dpr.id_periksa');
+        $this->db->join('obat o', 'dpr.id_obat = o.id');
+        $this->db->where('p.id', $id_periksa);
+    
+        $query = $this->db->get();
+        $results = $query->result(); // Semua baris data
+    
+        // Mengelompokkan data menjadi satu objek dengan obat sebagai array
+        if ($results) {
+            $data = [
+                'id_periksa' => $results[0]->id_periksa,
+                'id_daftar_poli' => $results[0]->id_daftar_poli,
+                'tgl_periksa' => $results[0]->tgl_periksa,
+                'catatan' => $results[0]->catatan,
+                'biaya_periksa' => $results[0]->biaya_periksa,
+                'id_pasien' => $results[0]->id_pasien,
+                'id_jadwal' => $results[0]->id_jadwal,
+                'keluhan' => $results[0]->keluhan,
+                'no_antrian' => $results[0]->no_antrian,
+                'nama_pasien' => $results[0]->nama,
+                'alamat_pasien' => $results[0]->alamat,
+                'no_ktp' => $results[0]->no_ktp,
+                'no_hp' => $results[0]->no_hp,
+                'no_rm' => $results[0]->no_rm,
+                'obat' => [] // Array untuk data obat
+            ];
+    
+            foreach ($results as $row) {
+                $data['obat'][] = [
+                    'id_obat' => $row->id_obat,
+                    'nama_obat' => $row->nama_obat,
+                    'harga' => $row->harga
+                ];
+            }
+    
+            return $data;
+        }
+    
+        return null; // Jika tidak ada data
+    }
+    
+    
+    // Fungsi untuk memperbarui data pemeriksaan
+    public function updatePeriksa($id_periksa, $data) {
+        $this->db->where('id', $id_periksa);
+        return $this->db->update('periksa', $data);
+    }
+
+    // Fungsi untuk menghapus obat yang sudah dipilih sebelumnya
+    public function deleteObat($id_periksa, $id_obat_lama) {
+        if (!empty($id_obat_lama)) {
+            $this->db->where('id_periksa', $id_periksa);
+            $this->db->where_in('id_obat', $id_obat_lama);
+            return $this->db->delete('detail_periksa');
+        }
+        return true; // Jika tidak ada obat lama untuk dihapus
+    }
+    public function deleteObqat($id_periksa, $id_obat_dihapus) {
+        if (!empty($id_obat_dihapus)) {
+            $this->db->where('id_periksa', $id_periksa);
+            $this->db->where_in('id_obat', $id_obat_dihapus); // Menghapus banyak obat berdasarkan array ID
+            return $this->db->delete('detail_periksa');
+        }
+        return true; // Jika tidak ada obat lama untuk dihapus
+    }
+    
+
+    // Fungsi untuk menambahkan obat yang baru dipilih
+    public function addObata($id_periksa, $id_obat_baru) {
+        if (!empty($id_obat_baru)) {
+            foreach ($id_obat_baru as $obat_id) {
+                $this->db->insert('detail_periksa', [
+                    'id_periksa' => $id_periksa,
+                    'id_obat' => $obat_id
+                ]);
+            }
+        }
+        return true; // Jika tidak ada obat baru, tetap mengembalikan true
+    }
+    public function addObat($id_periksa, $id_obat) {
+        $data = [
+            'id_periksa' => $id_periksa,
+            'id_obat' => $id_obat,
+        ];
+        return $this->db->insert('detail_periksa', $data);
+    }
+    
 
     public function get_daftar_pasien() {
         $this->db->select('daftar_poli.*, pasien.nama as nama_pasien, poli.nama_poli');

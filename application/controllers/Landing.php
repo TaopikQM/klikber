@@ -64,13 +64,16 @@ class Landing extends CI_Controller {
         $bulan = date('m');
         $no_rm = $tahun . $bulan . '-' . str_pad($new_id_pasien, 3, '0', STR_PAD_LEFT);
     
+        $username = 'P' . $tahun . '-' . $formatted_id;
+        $password = 'P' . $tahun . '-' . $formatted_id;
+		
         // Kirim data ke view
         $data = [
             'new_id_pasien' => $new_id_pasien, // ID pasien baru
             'no_rm' => $no_rm, // Nomor RM yang baru
+			'username' => $username, // Username yang baru
+			'password' => $password,
         ];
-    
-       
 		
 		$data['captcha']=$this->create_captcha();
 		$this->load->view('landing/regis',$data);
@@ -89,8 +92,8 @@ class Landing extends CI_Controller {
             $this->konten($ghj);
         } else {
             // Generate nomor RM berdasarkan ID pasien
-            $tahun = date('Y');
-            $bulan = date('m');
+            // $tahun = date('Y');
+            // $bulan = date('m');
             
             // Data untuk tabel pasien
             $data_pasien = [
@@ -104,8 +107,8 @@ class Landing extends CI_Controller {
             $this->MPasien->insert($data_pasien);
 
             // Data untuk tabel user
-            $username = $this->input->post('no_rm'); // Gunakan no_rm sebagai username
-            $password = $this->input->post('no_rm');
+            $username = $this->input->post('username');//$this->input->post('no_rm'); // Gunakan no_rm sebagai username
+            $password = $this->input->post('username');//$this->input->post('no_rm');
             
             $data_user = [
                 'username' => $username,

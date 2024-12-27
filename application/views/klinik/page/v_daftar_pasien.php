@@ -123,9 +123,9 @@ if($this->session->flashdata('notif') != NULL){
                             </td> 
                             <td class="text-center" >
                             
-                            <button class="btn <?= $key['status'] === 'Sudah Diperiksa' ? 'btn-success' : 'btn-warning'; ?> btn-sm">
-                                <?= $key['status']; ?>
-                            </button>
+                              <button class="btn <?= $key['status'] === 'Sudah Diperiksa' ? 'btn-success' : 'btn-warning'; ?> btn-sm">
+                                  <?= $key['status']; ?>
+                              </button>
                            
                             </td> 
                            

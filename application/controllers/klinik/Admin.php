@@ -67,8 +67,15 @@ class Admin extends CI_Controller {
             $data['total_users'] = $this->MUsers->count_users();
             $data['total_admin'] = $this->MAdmin->count_admin();
             $data['total_role'] = $this->MRole->count_role();
+            $data['total_logs'] = $this->MUsers->count_logs();
             $ghj=$this->load->view('klinik/page/dashboard-up', $data,TRUE);
             $this->konten($ghj);	//v_data_admin
+        }
+        public function tab() {
+            // $this->load->helper('pinjam');		
+            $data['admins'] = $this->MAdmin->get_all();
+            $ghj=$this->load->view('klinik/page/v_data_admin', $data,TRUE);
+            $this->konten($ghj);	
         }
     
         public function create() {
@@ -85,10 +92,10 @@ class Admin extends CI_Controller {
             $data['username'] = $username;
             $data['password'] = $password;
             
-            $ghj = $this->load->view('klinik/page/in-admin', '', TRUE);
+            $ghj = $this->load->view('klinik/page/in-admin', $data, TRUE);
             $this->konten($ghj);
         }
-    
+        
         public function store() {
             // Validasi input
             $this->form_validation->set_rules('nama', 'Nama Dokter', 'required');
@@ -133,11 +140,11 @@ class Admin extends CI_Controller {
                 $this->MUsers->insert($data_user);
                 $this->session->set_flashdata('notif', [
                     'tipe' => 1, // alert-primary
-                    'isi' => 'Data Admin berhasil ditambah, dengan nama : ' . $nama
+                    'isi' => 'Data Admin berhasil ditambah.'
                 ]);
                 
                 // Redirect setelah penyimpanan berhasil
-                redirect('admin');
+                redirect('admin/tab');
             }
         }
         
@@ -177,7 +184,7 @@ class Admin extends CI_Controller {
                 $this->MAdmin->update($id, $data);
                 $this->session->set_flashdata('notif', [
                     'tipe' => 1, // alert-primary
-                    'isi' => 'Data Admin berhasil diperbarui, dengan nama : ' . $nama
+                    'isi' => 'Data Admin berhasil diperbarui.'
                 ]);
                 redirect('admin');
             }

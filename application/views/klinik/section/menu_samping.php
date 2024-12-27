@@ -38,7 +38,7 @@
             <?php elseif ($this->session->userdata('role') == 'Dokter'): ?>
             <!-- Jika Role adalah 'dokter' -->
             <li class="dropdown">
-                <a href="<?php echo base_url('dokter/profile')?>" class="nav-link"><i data-feather="monitor"></i><span>Dashboard</span></a>
+                <a href="<?php echo base_url('landing/menu')?>" class="nav-link"><i data-feather="monitor"></i><span>Dashboard</span></a>
             </li>
             <!-- <li class="dropdown">
                 <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="mail"></i><span>Peminjaman</span></a>
@@ -64,7 +64,7 @@
             <?php elseif ($this->session->userdata('role') == 'Pasien'): ?>
             <!-- Jika Role adalah 'pasien' -->
             <li class="dropdown">
-                <a href="<?php echo base_url('pasien/profile')?>" class="nav-link"><i data-feather="monitor"></i><span>Dashboard</span></a>
+                <a href="<?php echo base_url('landing/menu')?>" class="nav-link"><i data-feather="monitor"></i><span>Dashboard</span></a>
             </li>
             <!-- <li class="dropdown">
                 <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="mail"></i><span>Peminjaman</span></a>
@@ -75,9 +75,9 @@
             <li class="dropdown">
                 <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="feather"></i><span>Data</span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="<?php echo base_url('pasien/riwayat')?>">Riwayat Medis</a></li>
+                    <li><a href="<?php echo base_url('pasien/riwayat')?>">Data Daftar Poli</a></li>
                     
-                    <!-- <li><a href="<?php echo base_url('dokter')?>">Dokter</a></li> -->
+                    <li><a href="<?php echo base_url('pasien/riwayat_pasien')?>">Riwayat Periksa</a></li>
                     <!-- <li><a href="<?php echo base_url('pasien')?>">Pasien</a></li> -->
                     <!-- <li><a href="<?php echo base_url('poli')?>">Poli</a></li>
                     <li><a href="<?php echo base_url('obat')?>">Obat</a></li> -->

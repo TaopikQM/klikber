@@ -55,8 +55,8 @@ if($this->session->flashdata('notif') != NULL){
                   'class'=>"needs-validation",
                        'novalidate'=>'');
             echo form_open_multipart('obat/update',$arrayName);?>
-             <div class="form-row">
-              <div class="form-group col-md-6">
+            
+              <div class="form-group">
                   <label for="tgl">Nama Obat</label>
                   <input type="hidden" name="naobatold" value="<?php echo $nama_obat;?>">
                   <input type="text" class="form-control" name="nama_obat" id="nama_obat" value="<?php echo $nama_obat;?>" required="required">
@@ -65,7 +65,6 @@ if($this->session->flashdata('notif') != NULL){
                         Silahkan Masukan Nama Obat
                   </div>
               </div>
-            </div>
             <div class="form-group"> 
               <label for="kemasan">Kemasan Obat</label>
               <select name="kemasan" class="form-control" id="kemasan" required>
@@ -82,7 +81,7 @@ if($this->session->flashdata('notif') != NULL){
                 
                 
                 <label for="harga">Harga</label>
-                <input type="text" class="form-control" id="harga" name="harga" value="<?php echo $harga; ?>" readonly>
+                <input type="number" class="form-control" id="harga" name="harga" value="<?php echo $harga; ?>" >
                 <?php echo form_error('harga');?>
                 <div class="invalid-feedback">
                         Silahkan Masukan Harga

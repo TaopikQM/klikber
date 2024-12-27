@@ -54,10 +54,11 @@
                 <?php echo form_error('alamat', '<div class="text-danger">', '</div>'); ?>
               </div>
               
-              <div class="col-md-12 ">
-              <label for="alamat">Username dan Pass</label>
-                  <input class="form_contril" placeholder="Username" type="text" name="username" value="<?= $username; ?>" readonly>
-              </div>
+              <div class="form-group">
+                <label for="username">Username dan Pass</label>
+                <input type="text" class="form-control" id="username" name="username" value="<?= $username; ?>" readonly>
+                <?php echo form_error('username', '<div class="text-danger">', '</div>'); ?>
+            </div>
 
               <!-- Tombol -->
               <div class="card-footer text-center">

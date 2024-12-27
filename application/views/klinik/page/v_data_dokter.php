@@ -78,6 +78,7 @@ if($this->session->flashdata('notif') != NULL){
                     <th class="text-center">NO HP</th>
                     <th class="text-center">POLI</th>
                     <th class="text-center">ALAMAT</th>
+                    <th class="text-center">USERNAME</th>
                     <th class="text-center">ACTION</th>
                     
                   </tr>
@@ -109,11 +110,18 @@ if($this->session->flashdata('notif') != NULL){
                             <td class="text-center" >
                               <?php 
                                 echo $key->alamat;
-                              ?>    
+                              ?>  
+                            </td>
+                            <td class="text-center">
+                                <?php 
+                                    // Jika username tidak ada, tampilkan 'NULL'
+                                    echo !empty($key->username) ? $key->username : 'NULL'; 
+                                ?>
+                            </td>
                             
                             <td class="text-center" >
 
-                              <a href="<?php $dxc=$this->encryption->encrypt(base64_encode($key->id)); $ff=str_replace(array('+','/','='),array('-','_','~'),$dxc); echo base_url();?>dokter/edit_a/<?php echo $ff; ?>">
+                              <a href="<?php $dxc=$this->encryption->encrypt(base64_encode($key->id)); $ff=str_replace(array('+','/','='),array('-','_','~'),$dxc); echo base_url();?>dokter/edit/<?php echo $ff; ?>">
                               <button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" title="Edit">
                                 <i class="fa fa-pen" aria-hidden="true"></i></button>
                               </button>

@@ -191,6 +191,10 @@ class MUsers extends CI_Model {
         return $this->db->count_all_results('users');
       }
 
+      public function count_logs() {
+        return $this->db->count_all_results('login_history');
+      }
+
     
     
     

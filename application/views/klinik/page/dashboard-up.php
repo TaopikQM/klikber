@@ -70,6 +70,36 @@
                 <!-- ./col -->
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
+                    <div class="small-box bg-secondary"  style="margin-bottom: 20px;">
+                    <div class="inner">
+                        <h3><?php echo $total_admin; ?></h3>
+
+                        <p>Total Admin</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-person-add"></i> 
+                    </div>
+                    <a href="admin/tab" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-light"  style="margin-bottom: 20px;">
+                    <div class="inner">
+                        <h3><?php echo $total_users; ?></h3>
+
+                        <p>Total Users</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-person-add"></i>
+                    </div>
+                    <a href="users/tab" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
                     <div class="small-box bg-warning"  style="margin-bottom: 20px;">
                     <div class="inner">
                         <h3><?php echo $total_obat; ?></h3>
@@ -97,36 +127,8 @@
                     <a href="poli/tab" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
-                 <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-light"  style="margin-bottom: 20px;">
-                    <div class="inner">
-                        <h3><?php echo $total_users; ?></h3>
-
-                        <p>Total Users</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-person-add"></i>
-                    </div>
-                    <a href="users/tab" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-secondary"  style="margin-bottom: 20px;">
-                    <div class="inner">
-                        <h3><?php echo $total_admin; ?></h3>
-
-                        <p>Total Admin</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-person-add"></i> 
-                    </div>
-                    <a href="admin/tab" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
+                
+                
                 <!-- ./col -->
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
@@ -140,6 +142,21 @@
                         <i class="ion ion-ios-settings"></i>
                     </div>
                     <a href="role" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-light"  style="margin-bottom: 20px;">
+                    <div class="inner">
+                        <h3><?php echo $total_logs; ?></h3>
+
+                        <p>Log Users</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-ios-settings"></i>
+                    </div>
+                    <a href="users/log" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
             </div>
