@@ -108,8 +108,71 @@ class MDokter extends CI_Model {
         $this->db->where('id', $id);
         return $this->db->delete('jadwal_periksa');
     }
-
     public function cek_jadwal_bentrok($data) {
+        // Langkah 1: Validasi jam mulai dan selesai
+        if (strtotime($data['jam_mulai']) >= strtotime($data['jam_selesai'])) {
+            return [
+                'status' => true,
+                'pesan' => 'Jam mulai harus lebih kecil dari jam selesai.'
+            ];
+        }
+        
+        // Langkah 2: Cek apakah dokter sudah memiliki jadwal di hari yang sama
+        $this->db->where('id_dokter', $data['id_dokter']);
+        $this->db->where('hari', $data['hari']);
+        $query_hari = $this->db->get('jadwal_periksa');
+    
+        if ($query_hari->num_rows() > 0) {
+            return [
+                'status' => true,
+                'pesan' => 'Dokter sudah memiliki jadwal pada hari yang sama.'
+            ];
+        }
+
+        // Langkah 3: Dapatkan id_poli dari tabel dokter berdasarkan id_dokter
+        $this->db->select('id_poli');
+        $this->db->where('id', $data['id_dokter']);
+        $query_poli = $this->db->get('dokter');
+        $result_poli = $query_poli->row();
+
+        if (!$result_poli) {
+            return [
+                'status' => true,
+                'pesan' => 'Data poli tidak ditemukan untuk dokter ini.'
+            ];
+        }
+
+        $id_poli = $result_poli->id_poli;
+    
+       // Langkah 4: Cek bentrokan jadwal dalam poli yang sama
+        $this->db->select('jadwal_periksa.jam_mulai, jadwal_periksa.jam_selesai');
+        $this->db->from('jadwal_periksa');
+        $this->db->join('dokter', 'jadwal_periksa.id_dokter = dokter.id');
+        $this->db->where('dokter.id_poli', $id_poli);
+        $this->db->where('jadwal_periksa.hari', $data['hari']);
+        $this->db->group_start(); // Grouping kondisi jam
+            $this->db->where('jadwal_periksa.jam_mulai <', $data['jam_selesai']);
+            $this->db->where('jadwal_periksa.jam_selesai >', $data['jam_mulai']);
+        $this->db->group_end();
+        $query_bentrok = $this->db->get();
+
+        if ($query_bentrok->num_rows() > 0) {
+            return [
+                'status' => true,
+                'pesan' => 'Jadwal bertabrakan dengan dokter lain dalam poli yang sama.'
+            ];
+        }
+    
+        // Tidak ada konflik
+        return [
+            'status' => false,
+            'pesan' => 'Jadwal valid.'
+        ];
+    }
+    
+    
+    
+    public function cek_jadwal_bentrommmk($data) {
         // Langkah 1: Cek apakah id_dokter sudah memiliki hari yang sama
         if (strtotime($data['jam_mulai']) >= strtotime($data['jam_selesai'])) {
             return [
@@ -123,12 +186,12 @@ class MDokter extends CI_Model {
         $query_hari = $this->db->get('jadwal_periksa');
     
         // Jika ada data dengan hari yang sama, jadwal bentrok langsung
-        // if ($query_hari->num_rows() > 0) {
-        //     return [
-        //         'status' => true,
-        //         'pesan' => 'Dokter sudah memiliki jadwal pada hari yang sama.'
-        //     ];
-        // }
+        if ($query_hari->num_rows() > 0) {
+            return [
+                'status' => true,
+                'pesan' => 'Dokter sudah memiliki jadwal pada hari yang sama.'
+            ];
+        }
     
         // Langkah 2: Jika tidak ada hari yang sama, cek bentrok berdasarkan rentang waktu
         if ($query_hari->num_rows() > 0) {
@@ -379,7 +442,7 @@ class MDokter extends CI_Model {
         $this->db->join('detail_periksa dpr', 'p.id = dpr.id_periksa');
         $this->db->join('obat o', 'dpr.id_obat = o.id');
         $this->db->join('jadwal_periksa jp', 'dp.id_jadwal = jp.id');
-        $this->db->where('jp.id_dokter', $id_dokter); // Filter berdasarkan ID dokter yang sedang login
+        // $this->db->where('jp.id_dokter', $id_dokter); // Filter berdasarkan ID dokter yang sedang login
 
         $this->db->group_by('p.id'); // Melakukan grup berdasarkan `id_periksa` untuk menggabungkan obat dengan id yang sama
 

@@ -28,9 +28,13 @@ if($this->session->flashdata('notif') != NULL){
       <div class="col-12">
         <div class="card">
           <div class="card-header">
-            <a href="<?php echo base_url()?>dokter/diperiksa" >
-            <button type="button" class="btn btn-success btn-icon icon-left">
-                  <i class="fas fa-file"></i> SUDAH DIPERIKSA
+            <!-- <a href="<?php echo base_url()?>pasien/daftarPoli" >
+            <button type="button" class="btn btn-info btn-icon icon-left">
+                  <i class="fas fa-plus"></i> Tambah
+            </button></a> -->
+            <a href="<?php echo base_url()?>dokter/daftar_pasien" >
+            <button type="button" class="btn btn-warning btn-icon icon-left">
+                  <i class="fas fa-file"></i> BELUM DIPERIKSA
             </button></a>
             <h4>&nbsp|| Data Nomor  </h4>
             </br>
@@ -76,10 +80,12 @@ if($this->session->flashdata('notif') != NULL){
                 <thead>
                   <tr bgcolor="#cccccc" >
                     <th class="text-center">NO</th>
+                    <th class="text-center">TANGGAL PERIKSA</th>
                     <th class="text-center">RIWAYAT MEDIS</th>
-                    <th class="text-center">PASIEN</th>
+                    <th class="text-center">NAMA</th>
                     <th class="text-center">KELUHAN</th>
-                    <th class="text-center">ANTRIAN</th>
+                    <th class="text-center">CATATAN</th>
+                    <th class="text-center">OBAT</th>
                     <th class="text-center">STATUS</th>
                     <th class="text-center">ACTION</th>
                     
@@ -88,46 +94,27 @@ if($this->session->flashdata('notif') != NULL){
                 <tbody>
                   <?php
                     // echo "<pre>";
-                    // print_r($riwayat);
+                    // print_r($periksa);
                     // echo "</pre>";
                   ?>
-                  <?php if (isset($riwayat) && !empty($riwayat)): ?>
-                    <?php $nomori=1; foreach ($riwayat as $key) { ?>
+                  
+                  <?php if (isset($periksa) && !empty($periksa)): ?>
+                    <?php $nomori=1; foreach ($periksa as $key) { ?>
                         <tr bgcolor="#cccccc">
                             <td  class="text-center"><?php echo $nomori;?></td>
                             
                             <td class="text-center" >
-                            
                               <?php 
-                                echo $key['no_rm'];
-                              ?> 
-                            </td> 
-                             
-                            <td class="text-center" >
-                              
-                              <?php 
-                                echo $key['pasien_nama'];
-                              ?>
-                            </td> 
-                            
-                            
-                            <td class="text-center" >
-                              <?php 
-                                echo $key['keluhan'];
+                                echo $key->tgl_periksa;
                               ?>    
                             </td> 
-                            <td class="text-center" >
-                              <?php 
-                                echo $key['no_antrian'];
-                              ?>    
-                            </td> 
-                            <td class="text-center" >
-                            
-                              <!-- <button class="btn <?= $key['status'] === 'Sudah Diperiksa' ? 'btn-success' : 'btn-warning'; ?> btn-sm">
-                                  <?= $key['status']; ?>
-                              </button> -->
-                           
-                              <?php if ($key['status_periksa'] == 1): ?>
+                            <td class="text-center"><?php echo $key->no_rm;?></td>
+                            <td class="text-center"><?php echo $key->nama;?></td>
+                            <td class="text-center"><?php echo $key->keluhan;?></td>
+                            <td class="text-center"><?php echo $key->catatan;?></td>
+                            <td class="text-center"><?php echo $key->obat;?></td>
+                            <td class="text-center">
+                            <?php if ($key->status_periksa == 1): ?>
                                   <button class="btn btn-success btn-sm">
                                       Sudah Diperiksa
                                   </button>
@@ -136,14 +123,13 @@ if($this->session->flashdata('notif') != NULL){
                                       Belum Diperiksa
                                   </button>
                               <?php endif; ?>
-
-                            </td> 
-                           
+                            </td>
+                            
                             <td class="text-center" >
                             
 
-                              <a href="<?php $dxc=$this->encryption->encrypt(base64_encode($key['id'])); $ff=str_replace(array('+','/','='),array('-','_','~'),$dxc); echo base_url();?>dokter/iPeriksa/<?php echo $ff; ?>">
-                              <button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" title="periksa">
+                              <a href="<?php $dxc=$this->encryption->encrypt(base64_encode($key->id_periksa)); $ff=str_replace(array('+','/','='),array('-','_','~'),$dxc); echo base_url();?>dokter/edit_riwayat/<?php echo $key->id_periksa; ?>">
+                              <button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" title="Edit">
                                 <i class="fa fa-pen" aria-hidden="true"></i></button>
                               </button>
                               </a>
@@ -154,8 +140,7 @@ if($this->session->flashdata('notif') != NULL){
                               <!-- <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" title="Hapus " id="hapus"  data-id="<?php echo $key->id;?>" data-nama_role="<?php echo $key->nama_role; ?>">
                                 <i  class="fa fa-trash" aria-hidden="true"></i>
                               </button> -->
-                              <!-- <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal<?= $key['id']; ?>">Detail</button> -->
-                              <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#detailModal<?= $key['id']; ?>">Detail</button>
+                              <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#detailModal<?= $key->id_periksa; ?>">Detail</button>
 
                             </td>
                         </tr>
@@ -164,10 +149,10 @@ if($this->session->flashdata('notif') != NULL){
                     ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="4" class="text-center">Tidak ada data riwayat.</td>
+                            <td colspan="4" class="text-center">Tidak ada riwayat pasien.</td>
                         </tr>
                     <?php endif; ?>
-                </tbody>
+                  </tbody>
               </table>
             </div>
           </div>
@@ -201,20 +186,20 @@ if($this->session->flashdata('notif') != NULL){
   </div>
 </div>
 <!-- Modal Detail -->
-<?php foreach ($riwayat as $key) : ?>
-<div class="modal fade" id="detailModal<?= $key['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="modalDetailLabel<?= $key['id']; ?>" aria-hidden="true">
+<?php foreach ($periksa as $key) : ?>
+<div class="modal fade" id="detailModal<?= $key->id_periksa; ?>" tabindex="-1" role="dialog" aria-labelledby="modalDetailLabel<?= $key->id; ?>" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header d-flex flex-column align-items-center">
         <!-- Nomor Antrian dalam Kotak -->
         <div class="text-center mb-3" style="width: 100%;">
           <button class="btn btn-primary btn-lg" style="font-size: 28px; font-weight: bold; padding: 10px 20px; border-radius: 8px;">
-            No. Antrian: <?= $key['no_antrian']; ?>
+            No. Antrian: <?php echo $key->tgl_periksa;?> 
           </button>
         </div>
-        <h5 class="modal-title" id="modalDetailLabel<?= $key['id']; ?>">Detail Riwayat Medis</h5>
+        <h5 class="modal-title" id="modalDetailLabel<?= $key->id_periksa; ?>">Detail Riwayat Medis</h5>
         
-        
+         
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; top: 10px; right: 15px;">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -222,23 +207,28 @@ if($this->session->flashdata('notif') != NULL){
       <div class="modal-body">
         <div class="row">
           <div class="col-md-6">
-            <p><strong>No. RM:</strong> <?= $key['no_rm']; ?></p>
-            <p><strong>Dokter:</strong> <?= $key['dokter_nama']; ?></p>
-            <p><strong>Poli:</strong> <?= $key['poli_nama']; ?></p>
+            <p><strong>No. RM:</strong> <?= $key->no_rm; ?></p>
+            <p><strong>Pasien:</strong> <?= $key->nama; ?></p>
+            <p><strong>Jam:</strong> <?= $key->tgl_periksa; ?></p>
+            <p><strong>Keluhan:</strong> <?= $key->keluhan; ?></p>
           </div>
           <div class="col-md-6">
-            <p><strong>Hari:</strong> <?= $key['hari']; ?></p>
-            <p><strong>Jam:</strong> <?= $key['jam_mulai']; ?> - <?= $key['jam_selesai']; ?></p>
-            <p><strong>Keluhan:</strong> <?= $key['keluhan']; ?></p>
-        
+            
+          <p><strong>Obat:</strong> <?= $key->obat; ?></p>
+          <p><strong>Catatan:</strong> <?= $key->catatan; ?></p>
           </div>
         </div>
+        <div class="text-center mb-3" style="width: 100%;">
+          <button class="btn btn-primary btn-lg" style="font-size: 28px; font-weight: bold; padding: 10px 20px; border-radius: 8px;">
+            Biaya: <?php echo $key->biaya_periksa;?> 
+          </button>
+        </div>
             
-        <p><strong>Status:</strong>
-          <span class="badge <?= $key['status'] === 'Sudah Diperiksa' ? 'badge-success' : 'badge-warning'; ?>">
-            <?= $key['status']; ?>
+        <!-- <p><strong>Status:</strong>
+          <span class="badge <?= $key->status === 'Sudah Diperiksa' ? 'badge-success' : 'badge-warning'; ?>">
+            <?= $key->status; ?>
           </span>
-        </p>
+        </p> -->
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

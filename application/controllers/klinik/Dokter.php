@@ -581,6 +581,32 @@ class Dokter extends CI_Controller {
     
         
     }
+    public function diperiksa() {
+    
+        $user_data = $this->session->userdata('user_data');
+
+        if ($user_data) {
+            $data = [
+                'id' => $user_data->id // Nama user
+            ];
+
+            
+                //  $data['riwayat'] = $this->MPasien->getRiwayatByPasien($user_data->id);
+                $riwayat = $this->MDokter->getRiwayatPeriksa($user_data->id);
+                // foreach ($riwayat as &$r) {
+                //     $r->status = $this->MPasien->isSudahDiperiksa($r->id_pasien) ? 'Sudah Diperiksa' : 'Belum Diperiksa';
+                // }
+                $data['periksa'] = $riwayat;
+            $ghj=$this->load->view('klinik/page/v_data_riwayat_pasien_bydokter', $data,true);
+            
+            $this->konten($ghj);
+        } else {
+            // Jika user_data tidak ada, redirect ke halaman login
+            redirect('landing');
+        }
+    
+        
+    }
 
     public function edit_riwayat($id_periksa) {
         
@@ -642,7 +668,7 @@ class Dokter extends CI_Controller {
             'tipe' => 1, // alert-primary
             'isi' => 'Pemeriksaan berhasil disimpan!'
         ]);
-        redirect('dokter/riwayat_pasien');
+        redirect('dokter/diperiksa');
     }
 
 

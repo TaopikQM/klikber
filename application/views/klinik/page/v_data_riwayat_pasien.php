@@ -112,11 +112,11 @@ if($this->session->flashdata('notif') != NULL){
                             <td class="text-center" >
                             
 
-                              <a href="<?php $dxc=$this->encryption->encrypt(base64_encode($key->id_periksa)); $ff=str_replace(array('+','/','='),array('-','_','~'),$dxc); echo base_url();?>dokter/edit_riwayat/<?php echo $key->id_periksa; ?>">
+                              <!-- <a href="<?php $dxc=$this->encryption->encrypt(base64_encode($key->id_periksa)); $ff=str_replace(array('+','/','='),array('-','_','~'),$dxc); echo base_url();?>dokter/edit_riwayat/<?php echo $key->id_periksa; ?>">
                               <button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" title="Edit">
                                 <i class="fa fa-pen" aria-hidden="true"></i></button>
                               </button>
-                              </a>
+                              </a> -->
                               
                               <!-- <button type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" title="Upload Ulang Dokumen">
                                 <i  class="fa fa-upload" aria-hidden="true"></i>

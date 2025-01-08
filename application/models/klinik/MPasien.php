@@ -190,7 +190,7 @@ class MPasien extends CI_Model {
             dokter.nama AS dokter_nama,
             dokter.id_poli,
             poli.nama_poli AS poli_nama
-        ');
+        '); 
         $this->db->from('daftar_poli');
         $this->db->join('pasien', 'daftar_poli.id_pasien = pasien.id', 'inner');
         $this->db->join('jadwal_periksa', 'daftar_poli.id_jadwal = jadwal_periksa.id', 'inner');
