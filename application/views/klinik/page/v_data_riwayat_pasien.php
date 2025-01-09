@@ -7,12 +7,12 @@
 
 <section class="section">
   <?php
-if($this->session->flashdata('notif') != NULL){
-    $tep=$this->session->flashdata('notif')['tipe'];
-    $is=$this->session->flashdata('notif')['isi'];
-    $cs = array('1' =>'alert-primary' ,'2' =>'alert-warning','3' =>'alert-danger');
-    
-?>
+  if($this->session->flashdata('notif') != NULL){
+      $tep=$this->session->flashdata('notif')['tipe'];
+      $is=$this->session->flashdata('notif')['isi'];
+      $cs = array('1' =>'alert-primary' ,'2' =>'alert-warning','3' =>'alert-danger');
+      
+  ?>
 <div class="alert <?php echo $cs[$tep];?> alert-dismissible show fade">
   <div class="alert-body">
     <button class="close" data-dismiss="alert">
@@ -32,7 +32,7 @@ if($this->session->flashdata('notif') != NULL){
             <button type="button" class="btn btn-info btn-icon icon-left">
                   <i class="fas fa-plus"></i> Tambah
             </button></a> -->
-            <h4>&nbsp|| Data Nomor  </h4>
+            <h4>&nbsp|| Data Rekam Medis  </h4>
             </br>
             <!-- <a href="<?php echo site_url('reports/mobil_ekspor_excel/exmobil') ?>" class="btn btn-success" target="_blank">
                 <i class="fas fa-file-excel"></i> Export to Excel
@@ -78,7 +78,8 @@ if($this->session->flashdata('notif') != NULL){
                     <th class="text-center">NO</th>
                     <th class="text-center">TANGGAL PERIKSA</th>
                     <th class="text-center">RIWAYAT MEDIS</th>
-                    <th class="text-center">NAMA</th>
+                    <th class="text-center">Pasien</th>
+                    <th class="text-center">Dokter</th>
                     <th class="text-center">KELUHAN</th>
                     <th class="text-center">CATATAN</th>
                     <th class="text-center">OBAT</th>
@@ -103,9 +104,10 @@ if($this->session->flashdata('notif') != NULL){
                                 echo $key->tgl_periksa;
                               ?>    
                             </td> 
-                            <td class="text-center"><?php echo $key->no_rm;?></td>
-                            <td class="text-center"><?php echo $key->nama;?></td>
-                            <td class="text-center"><?php echo $key->keluhan;?></td>
+                            <td class="text-center"><?php echo $key->pasien_no_rm;?></td>
+                            <td class="text-center"><?php echo $key->pasien_nama;?></td>
+                            <td class="text-center"><?php echo $key->dokter_nama;?></td>
+                            <td class="text-center"><?php echo $key->dp_keluhan;?></td>
                             <td class="text-center"><?php echo $key->catatan;?></td>
                             <td class="text-center"><?php echo $key->obat;?></td>
                             
@@ -139,6 +141,8 @@ if($this->session->flashdata('notif') != NULL){
                   </tbody>
               </table>
             </div>
+
+            
           </div>
         </div>
       </div>
@@ -191,17 +195,31 @@ if($this->session->flashdata('notif') != NULL){
       <div class="modal-body">
         <div class="row">
           <div class="col-md-6">
-            <p><strong>No. RM:</strong> <?= $key->no_rm; ?></p>
-            <p><strong>Pasien:</strong> <?= $key->nama; ?></p>
-            <p><strong>Jam:</strong> <?= $key->tgl_periksa; ?></p>
-            <p><strong>Keluhan:</strong> <?= $key->keluhan; ?></p>
+            <p><strong>No. RM:</strong> <?= $key->pasien_no_rm; ?></p>
+            <p><strong>Pasien:</strong> <?= $key->pasien_nama; ?></p>
+            <p><strong>Tgl Periksa:</strong> <?= $key->tgl_periksa; ?></p>
+            <p><strong>Keluhan:</strong> <?= $key->dp_keluhan; ?></p>
           </div>
           <div class="col-md-6">
             
+          <p><strong>Dokter:</strong> <?= $key->dokter_nama; ?></p>
           <p><strong>Obat:</strong> <?= $key->obat; ?></p>
           <p><strong>Catatan:</strong> <?= $key->catatan; ?></p>
+          <?php if ($key->dp_status_periksa == 1): ?>
+              <span class="badge badge-success badge-sm">
+                  Sudah Diperiksa
+              </span>
+          <?php else: ?>
+              <span class="badge badge-warning badge-sm">
+                  Belum Diperiksa
+              </span>
+          <?php endif; ?>
           </div>
         </div>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
         <div class="text-center mb-3" style="width: 100%;">
           <button class="btn btn-primary btn-lg" style="font-size: 28px; font-weight: bold; padding: 10px 20px; border-radius: 8px;">
             Biaya: <?php echo $key->biaya_periksa;?> 

@@ -62,7 +62,9 @@ class Landing extends CI_Controller {
         // Generate nomor RM berdasarkan ID pasien yang baru
         $tahun = date('Y');
         $bulan = date('m');
-        $no_rm = $tahun . $bulan . '-' . str_pad($new_id_pasien, 3, '0', STR_PAD_LEFT);
+		
+        $formatted_id = str_pad($new_id_pasien, 3, '0', STR_PAD_LEFT);
+        $no_rm = $tahun . $bulan . '-' . $formatted_id;
     
         $username = 'P' . $tahun . '-' . $formatted_id;
         $password = 'P' . $tahun . '-' . $formatted_id;

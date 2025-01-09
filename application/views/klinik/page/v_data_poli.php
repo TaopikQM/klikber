@@ -30,7 +30,7 @@ if($this->session->flashdata('notif') != NULL){
             <button type="button" class="btn btn-info btn-icon icon-left">
                   <i class="fas fa-plus"></i> Tambah
             </button></a>
-            <h4>&nbsp|| Data Nomor  </h4>
+            <h4>&nbsp|| Data Poli  </h4>
             </br>
             <!-- <a href="<?php echo site_url('reports/alat_ekspor_excel/exalat') ?>" class="btn btn-success" target="_blank">
                 <i class="fas fa-file-excel"></i> Export to Excel

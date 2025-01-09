@@ -28,7 +28,7 @@ class Users extends CI_Controller {
                         'cipher' => 'aes-128',
                         'mode' => 'ctr',
                         'key' => 'HJKHASJKD^**&&*(NJSHAHIDAsdfsa'
-                )
+                ) 
             );
             // date_default_timezone_set("Asia/Jakarta");
         }
@@ -38,7 +38,7 @@ class Users extends CI_Controller {
             $this->load->view('Klinik/home',$data);
         }
     
-        public function index() {
+        public function indexn() {
             $this->load->helper('pinjam');		
             $data['users'] = $this->MUsers->getAllData();
             $ghj=$this->load->view('klinik/page/v_data_users', $data,TRUE);
@@ -57,10 +57,10 @@ class Users extends CI_Controller {
             $this->konten($ghj);	
         }
 
-        public function delete() {
+        public function delete_log() {
             
             $id = $this->input->post('id');
             $this->MUsers->delete($id);
-            redirect('users');
+            redirect('users/log');
         }
 } 

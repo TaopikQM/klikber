@@ -434,14 +434,34 @@ class MDokter extends CI_Model {
         return $query->result();
     }
 
+    
     public function getRiwayatPeriksa($id_dokter) {
-        $this->db->select('p.id AS id_periksa, p.*, dp.*, ps.*, GROUP_CONCAT(o.nama_obat SEPARATOR ", ") AS obat'); // Menentukan kolom yang ingin diambil dan menggunakan GROUP_CONCAT untuk menggabungkan nama obat
+        $this->db->select('p.id AS id_periksa, 
+        p.*,
+       
+        dp.id as dp_id,
+        dp.id_pasien as dp_id_pasien,
+        dp.id_jadwal as dp_id_jadwal,
+        dp.keluhan as dp_keluhan,
+        dp.no_antrian as dp_no_antrian,
+        dp.status_periksa as dp_status_periksa,
+
+        ps.id as pasien_id, 
+        ps.nama as pasien_nama, 
+        ps.alamat as pasien_alamat, 
+        ps.no_ktp as pasien_no_ktp,
+        ps.no_hp as pasien_no_hp,
+        ps.no_rm as pasien_no_rm,
+       
+        GROUP_CONCAT(o.nama_obat SEPARATOR ", ") AS obat, 
+        d.nama as dokter_nama'); // Menentukan kolom yang ingin diambil dan menggunakan GROUP_CONCAT untuk menggabungkan nama obat
         $this->db->from('periksa p');
         $this->db->join('daftar_poli dp', 'p.id_daftar_poli = dp.id');
         $this->db->join('pasien ps', 'dp.id_pasien = ps.id');
         $this->db->join('detail_periksa dpr', 'p.id = dpr.id_periksa');
         $this->db->join('obat o', 'dpr.id_obat = o.id');
         $this->db->join('jadwal_periksa jp', 'dp.id_jadwal = jp.id');
+        $this->db->join('dokter d', 'jp.id_dokter = d.id');
         // $this->db->where('jp.id_dokter', $id_dokter); // Filter berdasarkan ID dokter yang sedang login
 
         $this->db->group_by('p.id'); // Melakukan grup berdasarkan `id_periksa` untuk menggabungkan obat dengan id yang sama

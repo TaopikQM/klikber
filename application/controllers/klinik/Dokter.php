@@ -568,7 +568,7 @@ class Dokter extends CI_Controller {
                 //  $data['riwayat'] = $this->MPasien->getRiwayatByPasien($user_data->id);
                 $riwayat = $this->MDokter->getRiwayatPeriksa($user_data->id);
                 foreach ($riwayat as &$r) {
-                    $r->status = $this->MPasien->isSudahDiperiksa($r->id_pasien) ? 'Sudah Diperiksa' : 'Belum Diperiksa';
+                    $r->status = $this->MPasien->isSudahDiperiksa($r->dp_id_pasien) ? 'Sudah Diperiksa' : 'Belum Diperiksa';
                 }
                 $data['periksa'] = $riwayat;
             $ghj=$this->load->view('klinik/page/v_data_riwayat_pasien', $data,true);
@@ -613,8 +613,8 @@ class Dokter extends CI_Controller {
 		$ida=str_replace(array('-','_','~'),array('+','/','='),$id_periksa);
 		$d=base64_decode($this->encryption->decrypt($ida));
         
-        $has['daftar_poli'] = $this->MDokter->getDetailById($id_periksa);
-		$has['periksa']=$this->MDokter->getDetailPeriksaById($id_periksa);
+        $has['daftar_poli'] = $this->MDokter->getDetailById($d);
+		$has['periksa']=$this->MDokter->getDetailPeriksaById($d);
         
         $has['obat'] = $this->MObat->get_all(); // Ambil obat untuk di pilih
         // $has['polis'] = $this->MPoli->get_all();

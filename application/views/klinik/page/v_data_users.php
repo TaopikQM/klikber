@@ -30,7 +30,7 @@ if($this->session->flashdata('notif') != NULL){
             <button type="button" class="btn btn-info btn-icon icon-left">
                   <i class="fas fa-plus"></i> Tambah
             </button></a>
-            <h4>&nbsp|| Data Nomor  </h4>
+            <h4>&nbsp|| Data Users  </h4>
             </br>
             <!-- <a href="<?php echo site_url('reports/mobil_ekspor_excel/exmobil') ?>" class="btn btn-success" target="_blank">
                 <i class="fas fa-file-excel"></i> Export to Excel
@@ -177,7 +177,7 @@ if($this->session->flashdata('notif') != NULL){
         <p id="mp-tex"></p>
       </div>
       <div class="modal-footer bg-whitesmoke br">
-         <?php echo form_open_multipart('dokter/delete_jadwal');?>
+         <?php echo form_open_multipart('users/delete_log');?>
             <input type="hidden" name="id" value="" id="id_del">
             <button type="submit" class="btn btn-danger">Hapus</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>  
