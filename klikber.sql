@@ -20,6 +20,11 @@ SET time_zone = "+00:00";
 --
 -- Database: `klikber`
 --
+-- Create the database first
+CREATE DATABASE IF NOT EXISTS `klikber`;
+
+-- Select the database
+USE `klikber`;
 
 -- --------------------------------------------------------
 
