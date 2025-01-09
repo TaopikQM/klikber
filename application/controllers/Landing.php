@@ -80,7 +80,56 @@ class Landing extends CI_Controller {
 		$data['captcha']=$this->create_captcha();
 		$this->load->view('landing/regis',$data);
 	}
+                    
 	public function store() {
+        // Validasi input
+        $this->form_validation->set_rules('nama', 'Nama Pasien', 'required');
+        $this->form_validation->set_rules('alamat', 'Alamat', 'required');
+        $this->form_validation->set_rules('no_ktp', 'No KTP', 'required');
+        $this->form_validation->set_rules('no_hp', 'No HP', 'required');
+        $this->form_validation->set_rules('no_rm', 'NO RM', 'required');
+        
+        if ($this->form_validation->run() == FALSE) {
+           	$this->session->set_flashdata('notif_login', 'Data Pasien gagal ditambah. Periksa kembali inputan Anda.');
+            redirect('landing/regis');
+        } else {
+            // Periksa apakah no_ktp sudah ada di database
+            $no_ktp = $this->input->post('no_ktp');
+            $existing_pasien = $this->MPasien->get_by_ktp($no_ktp);
+            
+            if ($existing_pasien) {
+                // Jika no_ktp sudah ada, beri notifikasi dan kembalikan ke form
+				$this->session->set_flashdata('notif_login', 'Data Pasien gagal ditambah. No KTP sudah terdaftar.');
+                redirect('landing/regis');
+            } else {
+                // Data untuk tabel pasien
+                $data_pasien = [
+                    'nama' => $this->input->post('nama'),
+                    'alamat' => $this->input->post('alamat'),
+                    'no_ktp' => $no_ktp,
+                    'no_hp' => $this->input->post('no_hp'),
+                    'no_rm' => $this->input->post('no_rm')
+                ];
+                $this->MPasien->insert($data_pasien);
+    
+                // Data untuk tabel user
+                $username = $this->input->post('username');//$this->input->post('no_rm'); // Gunakan no_rm sebagai username
+                $password = $this->input->post('username');//$this->input->post('no_rm');
+                
+                $data_user = [
+                    'username' => $username,
+                    'password' => password_hash($password, PASSWORD_DEFAULT),
+                    'id_role' => 2, // Role default pasien
+                ];
+                $this->MUsers->insert($data_user);
+    
+				// Redirect setelah penyimpanan berhasil
+				$this->session->set_flashdata('notif_login', 'Data Pasien berhasil ditambahkan.');
+                redirect('landing');
+            }
+        }
+    }
+	public function storeUtm() {
         // Validasi input
         $this->form_validation->set_rules('nama', 'Nama Pasien', 'required');
         $this->form_validation->set_rules('alamat', 'Alamat', 'required');
@@ -97,7 +146,7 @@ class Landing extends CI_Controller {
             // $tahun = date('Y');
             // $bulan = date('m');
             
-            // Data untuk tabel pasien
+            // Data untuk tabel pasien 
             $data_pasien = [
                 'nama' => $this->input->post('nama'),
                 'alamat' => $this->input->post('alamat'),
