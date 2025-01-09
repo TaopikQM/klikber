@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 27 Des 2024 pada 16.27
+-- Waktu pembuatan: 09 Jan 2025 pada 03.27
 -- Versi server: 10.4.28-MariaDB
 -- Versi PHP: 7.3.10
 
@@ -54,17 +54,18 @@ CREATE TABLE `daftar_poli` (
   `id_pasien` int(11) NOT NULL,
   `id_jadwal` int(11) NOT NULL,
   `keluhan` text NOT NULL,
-  `no_antrian` int(11) DEFAULT NULL
+  `no_antrian` int(11) DEFAULT NULL,
+  `status_periksa` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `daftar_poli`
 --
 
-INSERT INTO `daftar_poli` (`id`, `id_pasien`, `id_jadwal`, `keluhan`, `no_antrian`) VALUES
-(19, 21, 14, 'tidak bisa mendengar 3 hari', 1),
-(20, 17, 14, 'susah menelan makanan', 2),
-(21, 21, 14, 'SAKIT TIDAK BISA MENDENGAR 3 HARI', 3);
+INSERT INTO `daftar_poli` (`id`, `id_pasien`, `id_jadwal`, `keluhan`, `no_antrian`, `status_periksa`) VALUES
+(19, 21, 14, 'tidak bisa mendengar 3 hari', 1, 1),
+(20, 17, 14, 'susah menelan makanan', 2, 0),
+(21, 21, 14, 'SAKIT TIDAK BISA MENDENGAR 3 HARI', 3, 1);
 
 -- --------------------------------------------------------
 
@@ -111,7 +112,8 @@ INSERT INTO `dokter` (`id`, `nama`, `alamat`, `no_hp`, `id_poli`) VALUES
 (19, 'koki', 'nmnm', 90909, 1),
 (20, 'Martin', 'jalan 098', 12134, 3),
 (21, 'yono', 'jalan 23', 12134, 16),
-(22, 'MITO', 'Jalan 129', 123455, 8);
+(22, 'MITO', 'Jalan 129', 123455, 8),
+(23, 'ISNO', 'JALAN OIU', 8787, 1);
 
 -- --------------------------------------------------------
 
@@ -140,9 +142,13 @@ INSERT INTO `jadwal_periksa` (`id`, `id_dokter`, `hari`, `jam_mulai`, `jam_seles
 (13, 16, 'Selasa', '15:45:00', '17:46:00', 'inactive', NULL),
 (14, 22, 'Senin', '07:00:00', '11:55:00', 'active', '2024-12-27'),
 (15, 22, 'Selasa', '09:00:00', '11:50:00', 'inactive', '2024-12-26'),
-(16, 21, 'Senin', '07:00:00', '10:04:00', 'active', '2024-12-26'),
-(17, 21, 'Selasa', '07:04:00', '10:05:00', 'inactive', '2024-12-26'),
-(18, 22, 'Rabu', '08:13:00', '11:13:00', 'inactive', '2024-12-27');
+(16, 21, 'Senin', '07:00:00', '10:04:00', 'inactive', '2025-01-04'),
+(17, 21, 'Selasa', '07:04:00', '10:05:00', 'active', '2025-01-04'),
+(18, 22, 'Rabu', '08:13:00', '11:13:00', 'inactive', '2024-12-27'),
+(21, 23, 'Senin', '19:17:00', '21:17:00', 'inactive', NULL),
+(24, 23, 'Selasa', '17:47:00', '20:10:00', 'inactive', NULL),
+(25, 23, 'Rabu', '20:14:00', '21:14:00', 'inactive', NULL),
+(26, 16, 'Rabu', '19:14:00', '20:14:00', 'inactive', NULL);
 
 -- --------------------------------------------------------
 
@@ -242,7 +248,21 @@ INSERT INTO `login_history` (`id`, `id_user`, `login_time`, `logout_time`, `ip_a
 (166, 49, '2024-12-27 19:29:42', NULL, '127.0.0.1'),
 (167, 49, '2024-12-27 21:33:38', '2024-12-27 22:08:02', '127.0.0.1'),
 (168, 49, '2024-12-27 22:10:11', NULL, '127.0.0.1'),
-(169, 44, '2024-12-27 22:12:15', NULL, '127.0.0.1');
+(169, 44, '2024-12-27 22:12:15', '2024-12-27 22:52:35', '127.0.0.1'),
+(170, 43, '2025-01-04 19:16:56', '2025-01-04 19:18:25', '127.0.0.1'),
+(171, 44, '2025-01-04 19:16:57', '2025-01-04 19:18:58', '127.0.0.1'),
+(172, 34, '2025-01-04 19:18:43', NULL, '127.0.0.1'),
+(173, 37, '2025-01-04 19:19:14', '2025-01-04 19:22:01', '127.0.0.1'),
+(174, 29, '2025-01-04 19:22:25', '2025-01-04 19:23:22', '127.0.0.1'),
+(175, 52, '2025-01-04 19:24:12', NULL, '127.0.0.1'),
+(176, 52, '2025-01-05 18:44:58', NULL, '127.0.0.1'),
+(177, 34, '2025-01-05 18:45:17', NULL, '127.0.0.1'),
+(178, 52, '2025-01-05 23:37:54', '2025-01-05 23:49:10', '127.0.0.1'),
+(179, 34, '2025-01-05 23:39:47', NULL, '127.0.0.1'),
+(180, 44, '2025-01-05 23:49:49', NULL, '127.0.0.1'),
+(181, 44, '2025-01-06 02:22:16', NULL, '127.0.0.1'),
+(182, 34, '2025-01-06 02:38:47', NULL, '127.0.0.1'),
+(183, 44, '2025-01-06 03:54:37', NULL, '127.0.0.1');
 
 -- --------------------------------------------------------
 
@@ -422,7 +442,8 @@ INSERT INTO `users` (`id`, `username`, `password`, `id_role`) VALUES
 (45, 'P2024-017', '$2y$10$rFbEkFG4rG8rSb/M.AG4IudM5GJD6i5mZLR3LP2f6heQ/tOHbdP5u', 2),
 (49, 'P2024-021', '$2y$10$npBmpCrEFtM3qz6lPwGRd.aKL73fvMjOjhxrUld9YO/iNjn4CkYbq', 2),
 (50, 'A2024-009', '$2y$10$sucaDwDGFJWVD4bvtADL4ueDPmlScTnf8lGzuTHuUaKy29FHR78s6', 1),
-(51, 'A2024-010', '$2y$10$IqV.N8JTVxZvhtyrGW68DO6aTRmUgLhB3F2TEipsZDQMxzJa5DXsi', 1);
+(51, 'A2024-010', '$2y$10$IqV.N8JTVxZvhtyrGW68DO6aTRmUgLhB3F2TEipsZDQMxzJa5DXsi', 1),
+(52, 'D2025-023', '$2y$10$cn0qpTInvlfgitpwp6dalesipNOSEMpTA8MB3IGhKPNPLlCUGoNSK', 3);
 
 --
 -- Indexes for dumped tables
@@ -535,19 +556,19 @@ ALTER TABLE `detail_periksa`
 -- AUTO_INCREMENT untuk tabel `dokter`
 --
 ALTER TABLE `dokter`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT untuk tabel `jadwal_periksa`
 --
 ALTER TABLE `jadwal_periksa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT untuk tabel `login_history`
 --
 ALTER TABLE `login_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=170;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=184;
 
 --
 -- AUTO_INCREMENT untuk tabel `obat`
@@ -583,7 +604,7 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
