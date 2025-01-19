@@ -1,0 +1,22 @@
+{
+    "name": "AbsenMM",
+    "short_name": "AbsenM",
+    "description": "Deskripsi aplikasi kamu.",
+    "start_url": "/sekrup/absen",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#000000",
+    "icons": [
+      {
+        "src": "150.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      },
+      {
+        "src": "310.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+    ]
+  }
+  

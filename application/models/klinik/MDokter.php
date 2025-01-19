@@ -659,6 +659,28 @@ class MDokter extends CI_Model {
         return $this->db->get()->result();
     }
 
+    //konsultasi
+    public function getKonsulByDokter($id) {
+        $this->db->select('
+            konsultasi.*,
+            konsultasi.id as id_konsul,
+            pasien.*,
+            dokter.nama AS dokter_nama,
+            dokter.id_poli,
+            poli.nama_poli AS poli_nama,
+        '); 
+        $this->db->from('konsultasi');
+        $this->db->join('pasien', 'konsultasi.id_pasien = pasien.id', 'inner');
+        $this->db->join('dokter', 'konsultasi.id_dokter = dokter.id', 'inner');
+        $this->db->join('poli', 'dokter.id_poli = poli.id', 'inner'); // Join ke tabel poli
+        $this->db->where('konsultasi.id_dokter', $id);
+        return $this->db->get()->result_array();
+        // $result = $this->db->get()->result_array();
+        // return $result();
+    }
 
-    
+    public function updateK($id, $data) {
+        $this->db->where('id', $id);
+        return $this->db->update('konsultasi', $data);
+    }
 } 

@@ -149,6 +149,16 @@ if($this->session->userdata('idus') == null) {
                                     </a>
                                  </div>
                            </div>
+                           <div class="col-md-3">
+                                 <div class="titlepage">
+                                    <a href="<?php echo base_url('dokter/konsultasi'); ?>">
+                                    <div class="rounded-transparent">
+                                       <img class="img-fluid" src="<?php echo base_url()?>harta/landing/images/konsul.png" alt="Konsultasi"/>
+                                    </div>
+                                       <p>Pasien Konsultasi</p>
+                                    </a>
+                                 </div>
+                           </div>
                         </div>
 
                        
@@ -180,6 +190,16 @@ if($this->session->userdata('idus') == null) {
                                        <img class="img-fluid" src="<?php echo base_url()?>harta/landing/images/mrp.png" alt="Daftar Poli"/>
                                     </div>
                                        <p>Riwayat Periksa</p>
+                                    </a>
+                                 </div>
+                           </div>
+                           <div class="col-md-3">
+                                 <div class="titlepage">
+                                    <a href="<?php echo base_url('pasien/konsultasi'); ?>">
+                                    <div class="rounded-transparent">
+                                       <img class="img-fluid" src="<?php echo base_url()?>harta/landing/images/konsul.png" alt="Konsultasi"/>
+                                    </div>
+                                       <p>Konsultasi</p>
                                     </a>
                                  </div>
                            </div>

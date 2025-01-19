@@ -36,7 +36,7 @@
               <!-- Poli -->
               <div class="form-group">
                 <label for="id_poli">Poli</label>
-                <select name="id_poli" class="form-control select2" id="poli" required>
+                <select name="id_poli" class="form-control " id="poli" required>
                   <option value="">Pilih Poli</option>
                   <?php foreach ($poli as $p): ?>
                     <option value="<?php echo $p->id; ?>" <?php echo set_select('id_poli', $p->id); ?>>

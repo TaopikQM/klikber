@@ -280,5 +280,55 @@ class MPasien extends CI_Model {
         $query = $this->db->get();
         return $query->result(); // Mengembalikan hasil query
     }
-    
+   
+    //konsultasi
+    public function getKonsultasi($id) {
+        $this->db->select('
+            konsultasi.*,
+            konsultasi.id as id_konsul,
+            pasien.*,
+            dokter.nama AS dokter_nama,
+            dokter.id_poli,
+            poli.nama_poli AS poli_nama,
+        '); 
+        $this->db->from('konsultasi');
+        $this->db->join('pasien', 'konsultasi.id_pasien = pasien.id', 'inner');
+        $this->db->join('dokter', 'konsultasi.id_dokter = dokter.id', 'inner');
+        $this->db->join('poli', 'dokter.id_poli = poli.id', 'inner'); // Join ke tabel poli
+        $this->db->where('konsultasi.id_pasien', $id);
+        return $this->db->get()->result_array();
+        // $result = $this->db->get()->result_array();
+        // return $result();
+    }
+    public function saveDaftarKonsul($data) {
+        $this->db->insert('konsultasi', $data);
+        return $this->db->insert_id(); // Mengembalikan ID yang baru ditambahkan
+    }
+    function getkonsul_by_id($id){
+		// $this->db->where('id', $id);
+        $this->db->select('
+            konsultasi.*,
+            konsultasi.id as id_konsul,
+            pasien.*,
+            dokter.nama AS dokter_nama,
+            dokter.id_poli,
+            poli.nama_poli AS poli_nama,
+        '); 
+        $this->db->from('konsultasi');
+        $this->db->join('pasien', 'konsultasi.id_pasien = pasien.id', 'inner');
+        $this->db->join('dokter', 'konsultasi.id_dokter = dokter.id', 'inner');
+        $this->db->join('poli', 'dokter.id_poli = poli.id', 'inner');
+        $this->db->where('konsultasi.id', $id);
+        return $this->db->get()->result_array();
+		// return $this->db->get('konsultasi');
+ 
+	}
+    public function updateK($id, $data) {
+        $this->db->where('id', $id);
+        return $this->db->update('konsultasi', $data);
+    }
+    public function deleteK($id) {
+        $this->db->where('id', $id);
+        return $this->db->delete('konsultasi');
+    }
 }  

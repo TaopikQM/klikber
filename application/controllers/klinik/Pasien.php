@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 class Pasien extends CI_Controller {
-
+ 
 	public function __construct(){
 		parent::__construct();
 		/*$hjk=$this->session->userdata(base64_encode('jajahan'));
@@ -421,7 +421,7 @@ class Pasien extends CI_Controller {
 
         if ($id_poli) {
             $data = $this->MDokter->getDokterJadwalByPoli($id_poli);
-            echo json_encode($data);
+            echo json_encode($data); 
         } else {
             echo json_encode([]);
         }
@@ -511,6 +511,127 @@ class Pasien extends CI_Controller {
          }
      
          
+    }
+
+    //konsultasi
+    public function konsultasi() {		
+       
+        $user_data = $this->session->userdata('user_data');
+ 
+         if ($user_data) {
+             $data = [
+                 'id' => $user_data->id // Nama user
+             ];
+ 
+             
+                //  $data['riwayat'] = $this->MPasien->getRiwayatByPasien($user_data->id);
+                $pasiens = $this->MPasien->getKonsultasi($user_data->id);
+                // foreach ($riwayat as &$r) {
+                //     $r['status'] = $this->MPasien->isSudahDiperiksa($r['id']) ? 'Sudah Diperiksa' : 'Belum Diperiksa';
+                // }
+                $data['pasiens'] = $pasiens;
+               $ghj=$this->load->view('klinik/page/v_data_konsultasi', $data,true);
+               
+             $this->konten($ghj);
+         } else {
+             // Jika user_data tidak ada, redirect ke halaman login
+             redirect('landing');
+         }
+    }
+
+    public function Skonsultasi() {
+        $user_data = $this->session->userdata('user_data');
+        // $id_jadwal = $this->input->post('id_jadwal');
+        $id_dokter = $this->input->post('id_dokter');
+        $id_pasien = $user_data->id;
+        $subject = $this->input->post('subject');
+        $pertanyaan = $this->input->post('pertanyaan');
+
+
+        $data = [
+            
+            'subject' => $subject,
+            'pertanyaan' => $pertanyaan,
+            'tgl_konsultasi' =>  date('Y-m-d H:i:s'),
+            'id_pasien' => $id_pasien,
+            'id_dokter' => $id_dokter,
+        ];
+        $this->MPasien->saveDaftarKonsul($data);
+        $this->session->set_flashdata('notif', [
+            'tipe' => 1, // alert-primary
+            'isi' => 'Konsultasi berhasil! '
+        ]);
+        redirect('pasien/konsultasi');
+    }
+    public function addKonsutasi() {
+        $user_data = $this->session->userdata('user_data');
+ 
+         if ($user_data) {
+            //  $data = [
+            //      'id_pasien' => $user_data->id // Nama user
+            //  ];
+             $data['dokter'] = $this->MDokter->get_all();
+             $data['poli'] = $this->MPoli->get_all();
+               $ghj=$this->load->view('klinik/page/in-konsultasi', $data,true);
+             $this->konten($ghj);
+         } else {
+             // Jika user_data tidak ada, redirect ke halaman login
+             redirect('landing');
+         }
+       
+    }
+    public function ekonsul($id) {
+        
+		$ida=str_replace(array('-','_','~'),array('+','/','='),$id);
+		$d=base64_decode($this->encryption->decrypt($ida));
+		$has['pasien']=$this->MPasien->getkonsul_by_id($d);
+       $ghj=$this->load->view('klinik/page/v-edit-konsul',$has,TRUE);
+		$this->konten($ghj);
+    }
+
+    public function updateKon() {
+		// Validasi input
+		$id = $this->input->post('idk');
+		$this->form_validation->set_rules('subject', 'subject', 'required');
+		$this->form_validation->set_rules('pertanyaan', 'pertanyaan', 'required');
+		
+		if ($this->form_validation->run() == FALSE) {
+			// Jika validasi gagal, tampilkan kembali form edit
+		// 	$data['pasien'] = $this->MPasien->get_by_id($id);
+        //    $this->load->view('klinik/page/v-edit-pasien', $data);
+        $this->session->set_flashdata('notif', [
+            'tipe' => 3, // alert-primary
+            'isi' => 'Data Konsul gagal diperbarui. '
+        ]);
+        redirect('pasien/konsultasi');
+		} else {
+			// Jika validasi berhasil, lanjutkan dengan update
+			$data = [
+				'subject' => $this->input->post('subject'),
+				'pertanyaan' => $this->input->post('pertanyaan'),
+			];
+		
+			$this->MPasien->updateK($id, $data);
+          
+            $this->session->set_flashdata('notif', [
+                'tipe' => 1, // alert-primary
+                'isi' => 'Data Konsul berhasil diperbarui. '
+            ]);
+            // $this->load->view('pasien/tab');
+			redirect('pasien/konsultasi');
+		}
+	}
+
+    public function dkonsul() {
+        $id = $this->input->post('id');
+        $this->MPasien->deleteK($id);
+        redirect('pasien/konsultasi');
+    }
+
+    public function getDokterK() {
+        $id_poli = $this->input->post('id_poli');
+        $dokter = $this->MDokter->getDokterByPoliK($id_poli);
+        echo json_encode($dokter);
     }
 
 }  

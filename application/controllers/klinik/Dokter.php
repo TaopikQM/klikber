@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 class Dokter extends CI_Controller {
-
+ 
 	public function __construct(){
 		parent::__construct();
 		/*$hjk=$this->session->userdata(base64_encode('jajahan'));
@@ -671,5 +671,61 @@ class Dokter extends CI_Controller {
         redirect('dokter/diperiksa');
     }
 
+    public function konsultasi() {
+        $user_data = $this->session->userdata('user_data');
+
+        if ($user_data) {
+            $id_dokter = $user_data->id;
+
+            // Ambil data pasien yang belum diperiksa
+            $data['riwayat'] = $this->MDokter->getKonsulByDokter($id_dokter);
+           
+
+            // Muat view dengan data pasien
+            $konten = $this->load->view('klinik/page/v_data_dokterK', $data, true);
+            $this->konten($konten);
+        } else {
+            // Redirect ke halaman login jika user belum login
+            redirect('landing');
+        }
+    }
+    public function ekonsul($id) {
+        
+		$ida=str_replace(array('-','_','~'),array('+','/','='),$id);
+		$d=base64_decode($this->encryption->decrypt($ida));
+		$has['pasien']=$this->MPasien->getkonsul_by_id($d);
+       $ghj=$this->load->view('klinik/page/v-edit-konsulD',$has,TRUE);
+		$this->konten($ghj);
+    }
+    public function updateKon() {
+		// Validasi input
+		$id = $this->input->post('idk');
+		$this->form_validation->set_rules('jawaban', 'jawaban', 'required');
+		
+		if ($this->form_validation->run() == FALSE) {
+			// Jika validasi gagal, tampilkan kembali form edit
+		// 	$data['pasien'] = $this->MPasien->get_by_id($id);
+        //    $this->load->view('klinik/page/v-edit-pasien', $data);
+        $this->session->set_flashdata('notif', [
+            'tipe' => 3, // alert-primary
+            'isi' => 'Data Jawaban Konsul gagal diperbarui. '
+        ]);
+        redirect('dokter/konsultasi');
+		} else {
+			// Jika validasi berhasil, lanjutkan dengan update
+			$data = [
+				'jawaban' => $this->input->post('jawaban'),
+			];
+		
+			$this->MDokter->updateK($id, $data);
+          
+            $this->session->set_flashdata('notif', [
+                'tipe' => 1, // alert-primary
+                'isi' => 'Data Jawaban Konsul berhasil diperbarui. '
+            ]);
+            // $this->load->view('pasien/tab');
+			redirect('dokter/konsultasi');
+		}
+	}
 
 }  
